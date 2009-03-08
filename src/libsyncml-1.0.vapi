@@ -60,8 +60,10 @@ namespace Syncml {
 	public class DevInf {
 	}
 
-	[CCode (cname="SmlError", ref_function="smlErrorRef", unref_function="smlErrorDeref")]
+	[CCode (cname="SmlError", cheader_filename="libsyncml/syncml.h,libsyncml-1.0.h", ref_function="smlErrorRef", unref_function="smlErrorUnrefHelper")]
 	public class Error {
+		[CCode (cname="smlErrorDeref")]
+		public static void unref(Error *err);
 	}
 
 	[CCode (cheader_filename="libsyncml/data_sync_api/standard.h")]
