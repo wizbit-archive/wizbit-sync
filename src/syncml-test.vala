@@ -48,8 +48,11 @@ static int main(string[] args) {
 	so.register_get_alert_type_callback(recv_alert_type);
 	so.register_change_callback(recv_change);
 
-	so.init(out e);
-	so.run(out e);
+	if (!so.init(out e))
+		return 1;
+
+	if (!so.run(out e))
+		return 1;
 
 	return 0;
 }
