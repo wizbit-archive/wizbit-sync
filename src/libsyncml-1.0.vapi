@@ -60,7 +60,7 @@ namespace Syncml {
 	public class DevInf {
 	}
 
-	[CCode (cname="SmlError")]
+	[CCode (cname="SmlError", ref_function="smlErrorRef", unref_function="smlErrorDeref")]
 	public class Error {
 	}
 
@@ -133,7 +133,7 @@ namespace Syncml {
 
 		[CCode (cname="SmlDataSyncObject", ref_function="smlDataSyncObjectRef", unref_function="smlDataSyncObjectUnref")]
 		public class SyncObject {
-			[CCode (cname="SmlDataSyncObjectNew")]
+			[CCode (cname="smlDataSyncNew")]
 			public SyncObject(SessionType dsType, TransportType tspType, out Error err);
 			[CCode (cname="smlDataSyncSetOption")]
 			public bool set_option(string name, string value, out Error err);
