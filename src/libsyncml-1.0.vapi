@@ -1,13 +1,13 @@
 
 namespace Syncml {
 
-	[CCode (cname="SmlSessionType", cprefix="SML_SESSION_TYPE_")]
+	[CCode (cname="SmlSessionType", cprefix="SML_SESSION_TYPE_", cheader_filename="libsyncml/sml_defines.h")]
 	public enum SessionType {
 		SERVER,
 		CLIENT
 	}
 
-	[CCode (cname="SmlTransportType", cprefix="SML_TRANSPORT_TYPE_")]
+	[CCode (cname="SmlTransportType", cprefix="SML_TRANSPORT_TYPE_", cheader_filename="libsyncml/sml_defines.h")]
 	public enum TransportType {
 		OBEX_CLIENT,
 		OBEX_SERVER,
@@ -15,8 +15,45 @@ namespace Syncml {
 		HTTP_SERVER
 	}
 
-	[CCode (cname="SmlLocation")]
-	class Location {
+	[CCode (cname="SmlAlertType", cprefix="SML_ALERT_", cheader_filename="libsyncml/sml_defines.h")]
+	public enum AlertType {
+		UNKNOWN,
+		DISPLAY,
+		TWO_WAY,
+		SLOW_SYNC,
+		ONE_WAY_FROM_CLIENT,
+		REFRESH_FROM_CLIENT,
+		ONE_WAY_FROM_SERVER,
+		REFRESH_FROM_SERVER,
+		TWO_WAY_BY_SERVER,
+		ONE_WAY_FROM_CLIENT_BY_SERVER,
+		REFRESH_FROM_CLIENT_BY_SERVER,
+		ONE_WAY_FROM_SERVER_BY_SERVER,
+		REFRESH_FROM_SERVER_BY_SERVER,
+		RESULT,
+		NEXT_MESSAGE,
+		NO_END_OF_DATA
+	}
+
+	[CCode (cname="SmlChangeType", cprefix="SML_CHANGE_", cheader_filename="libsyncml/sml_defines.h")]
+	public enum ChangeType {
+		UNKNOWN,
+		ADD,
+		REPLACE,
+		DELETE
+	}
+
+	[CCode (cname="SmlLocation", cheader_filename="libsyncml/sml_elements.h", ref_function="smlLocationRef", unref_function="smlLocationUnref")]
+	public class Location {
+		[CCode (cname="smlLocationNew")]
+		public Location(string locURI, string locName, ref Error err);
+
+		[CCode (cname="smlLocationGetURI")]
+		public string get_uri();
+		[CCode (cname="smlLocationGetName")]
+		public string get_name();
+		[CCode (cname="smlLocationSetName")]
+		public void set_name(string name);
 	}
 
 	[CCode (cname="SmlError")]
