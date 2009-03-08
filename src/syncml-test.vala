@@ -2,8 +2,33 @@
 using Syncml;
 using Syncml.DataSync;
 
-void recv_event(SyncObject obj) {
+void recv_event(SyncObject obj, EventType type) {
+	switch (type) {
+		case EventType.ERROR:
+			break;
 
+		case EventType.CONNECT:
+			break;
+
+		case EventType.DISCONNECT:
+			break;
+
+		case EventType.FINISHED:
+			break;
+
+		case EventType.GOT_ALL_ALERTS:
+			break;
+
+		case EventType.GOT_ALL_CHANGES:
+			break;
+
+		case EventType.GOT_ALL_MAPPINGS:
+			break;
+
+		default:
+			critical("Unknown event (%d)", type);
+			break;
+	}
 }
 
 AlertType recv_alert_type(SyncObject obj, string source, AlertType type) {
