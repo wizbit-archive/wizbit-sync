@@ -101,7 +101,7 @@ namespace Syncml {
 			public const string FAKE_SOFTWARE_VERSION;
 		}
 
-		[CCode (cprefix="SML_DATA_SYNC_EVENT_")]
+		[CCode (cname="SmlDataSyncEventType", cprefix="SML_DATA_SYNC_EVENT_")]
 		public enum EventType {
 			ERROR,
 			CONNECT,
@@ -112,24 +112,24 @@ namespace Syncml {
 			FINISHED
 		}
 
-		[CCode (cname="SmlDataSyncEventCallback")]
-		public delegate void EventCallback(SyncObject object, EventType type, void *userdata, Error *error);
-		[CCode (cname="SmlDataSyncGetAlertTypeCallback")]
-		public delegate AlertType GetAlertTypeCallback(SyncObject object, string source, AlertType type, void *userdata, out Error err);
-		[CCode (cname="SmlDataSyncChangeCallback")]
-		public delegate bool ChangeCallback(SyncObject object, string source, ChangeType type, string uid, char *data, uint size, void *userdata, out Error error);
-		[CCode (cname="SmlDataSyncChangeStatusCallback")]
-		public delegate bool ChangeStatusCallback(SyncObject object, uint code, string newuid, void *userdata, out Error error);
-		[CCode (cname="SmlDataSyncGetAnchorCallback")]
-		public delegate string GetAnchorCallback(SyncObject object, string name, void *userdata, out Error error);
-		[CCode (cname="SmlDataSyncSetAnchorCallback")]
-		public delegate bool SetAnchorCallback(SyncObject object, string name, string value, void *userdata, out Error error);
-		[CCode (cname="SmlWriteDevInfCallback")]
-		public delegate bool WriteDevInfCallback(SyncObject object, DevInf devinf, void *userdate, out Error error);
-		[CCode (cname="SmlReadDevInfCallback")]
-		public delegate DevInf ReadDevInfCallback(SyncObject object, string devid, void *userdata, out Error error);
-		[CCode (cname="HandleRemoteDevInfCallback")]
-		public delegate bool HandleRemoteDevInfCallback(SyncObject object, DevInf devinf, void *userdata, out Error error);
+		[CCode (cname="SmlDataSyncEventCallback", instance_pos=2.1)]
+		public delegate void EventCallback(SyncObject object, EventType type, out Error error);
+		[CCode (cname="SmlDataSyncGetAlertTypeCallback", instance_pos=3.1)]
+		public delegate AlertType GetAlertTypeCallback(SyncObject object, string source, AlertType type, out Error err);
+		[CCode (cname="SmlDataSyncChangeCallback", instance_pos=6.1)]
+		public delegate bool ChangeCallback(SyncObject object, string source, ChangeType type, string uid, char *data, uint size, out Error error);
+		[CCode (cname="SmlDataSyncChangeStatusCallback", instance_pos=3.1)]
+		public delegate bool ChangeStatusCallback(SyncObject object, uint code, string newuid, out Error error);
+		[CCode (cname="SmlDataSyncGetAnchorCallback", instance_pos=2.1)]
+		public delegate string GetAnchorCallback(SyncObject object, string name, out Error error);
+		[CCode (cname="SmlDataSyncSetAnchorCallback", instance_pos=3.1)]
+		public delegate bool SetAnchorCallback(SyncObject object, string name, string value, out Error error);
+		[CCode (cname="SmlWriteDevInfCallback", instance_pos=2.1)]
+		public delegate bool WriteDevInfCallback(SyncObject object, DevInf devinf, out Error error);
+		[CCode (cname="SmlReadDevInfCallback", instance_pos=2.1)]
+		public delegate DevInf ReadDevInfCallback(SyncObject object, string devid, out Error error);
+		[CCode (cname="HandleRemoteDevInfCallback", instance_pos=2.1)]
+		public delegate bool HandleRemoteDevInfCallback(SyncObject object, DevInf devinf, out Error error);
 
 		[CCode (cname="SmlDataSyncObject", ref_function="smlDataSyncObjectRef", unref_function="smlDataSyncObjectUnref")]
 		public class SyncObject {
@@ -172,7 +172,7 @@ namespace Syncml {
 			[CCode (cname="smlDataSyncRegisterHandleRemoteDevInfCallback")]
 			public void register_handle_remote_devinf_callback(HandleRemoteDevInfCallback callback);
 
-			[CCode (cname="smlDataSyncRegisterChangeStatusCallback", delegate_target_position="0")]
+			[CCode (cname="smlDataSyncRegisterChangeStatusCallback")]
 			public void register_change_status_callback(ChangeStatusCallback callback);
 		}
 	}
