@@ -67,38 +67,38 @@ namespace Syncml {
 	[CCode (cheader_filename="libsyncml/data_sync_api/standard.h")]
 	namespace DataSync {
 
-		[CCode (cprefix="SML_DATA_SYNC_CONFIG_")]
+		[CCode (lower_case_cprefix="SML_DATA_SYNC_CONFIG_", cheader_filename="libsyncml/data_sync_api/defines.h")]
 		namespace Config {
-			public string ConnectionType;
-			public string ConnectionSerial;
-			public string ConnectionBluetooth;
-			public string ConnectionIrda;
-			public string ConnectionNet;
-			public string ConnectionUsb;
+			public const string CONNECTION_TYPE;
+			public const string CONNECTION_SERIAL;
+			public const string CONNECTION_BLUETOOTH;
+			public const string CONNECTION_IRDA;
+			public const string CONNECTION_NET;
+			public const string CONNECTION_USB;
 
-			public string AuthUsername;
-			public string AuthPassword;
-			public string AuthType;
-			public string AuthBasic;
-			public string AuthNone;
-			public string AuthMd5;
+			public const string AUTH_USERNAME;
+			public const string AUTH_PASSWORD;
+			public const string AUTH_TYPE;
+			public const string AUTH_BASIC;
+			public const string AUTH_NONE;
+			public const string AUTH_MD5;
 
-			public string ConfigVersion;
-			public string ConfigIdentifier;
+			public const string CONFIG_VERSION;
+			public const string CONFIG_IDENTIFIER;
 
-			public string UseWbxml;
-			public string UseStringTable;
-			public string UseTimestampAnchor;
-			public string UseNumberOfChanges;
-			public string UseLocalTime;
-			public string OnlyReplace;
-			public string MaxMsgSize;
-			public string MaxObjSize;
+			public const string USE_WBXML;
+			public const string USE_STRING_TABLE;
+			public const string USE_TIMESTAMP_ANCHOR;
+			public const string USE_NUMBER_OF_CHANGES;
+			public const string USE_LOCAL_TIME;
+			public const string ONLY_REPLACE;
+			public const string MAX_MSG_SIZE;
+			public const string MAX_OBJ_SIZE;
 
-			public string FakeDevice;
-			public string FakeManufacturer;
-			public string FakeModel;
-			public string FakeSoftwareVersion;
+			public const string FAKE_DEVICE;
+			public const string FAKE_MANUFACTURER;
+			public const string FAKE_MODEL;
+			public const string FAKE_SOFTWARE_VERSION;
 		}
 
 		[CCode (cprefix="SML_DATA_SYNC_EVENT_")]
