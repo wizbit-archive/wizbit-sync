@@ -5,24 +5,38 @@ using Syncml.DataSync;
 void recv_event(SyncObject obj, EventType type) {
 	switch (type) {
 		case EventType.ERROR:
+			debug("An error occured :-/");
 			break;
 
 		case EventType.CONNECT:
+			debug("Remote connected");
 			break;
 
 		case EventType.DISCONNECT:
+			debug("Remote disconnected");
 			break;
 
 		case EventType.FINISHED:
+			debug("Session finished...");
 			break;
 
 		case EventType.GOT_ALL_ALERTS:
+			debug("Got all alerts from remote");
+			if (sessionType == SessionType.CLIENT) {
+				debug("Sending changes...");
+			}
 			break;
 
 		case EventType.GOT_ALL_CHANGES:
+			debug("Got all changes from remote");
+			if (sessionType == SessionType.SERVER) {
+				debug("Sending changes...");
+			}
 			break;
 
 		case EventType.GOT_ALL_MAPPINGS:
+			assert(sessionType == SessionType.SERVER);
+			debug("All mappings received");
 			break;
 
 		default:
@@ -39,10 +53,16 @@ bool recv_change(SyncObject obj) {
 	return false;
 }
 
+SessionType sessionType;
+TransportType transportType;
+
 static int main(string[] args) {
 	Syncml.Error e;
 
-	var so = new SyncObject(SessionType.CLIENT, TransportType.HTTP_SERVER, out e);
+	sessionType = SessionType.CLIENT;
+	transportType = TransportType.HTTP_SERVER;
+
+	var so = new SyncObject(sessionType, transportType, out e);
 
 	so.register_event_callback(recv_event);
 	so.register_get_alert_type_callback(recv_alert_type);
