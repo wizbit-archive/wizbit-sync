@@ -2,7 +2,17 @@
 using Syncml;
 using Syncml.DataSync;
 
-void recv_event(SyncObject obj, EventType type) {
+bool send_changes(SyncObject obj, out Syncml.Error err) {
+	debug("Sending changes to remote...");
+
+	while (false) {
+		// obj.add_change(obj, source, changetype, filename, buf, length, null, out err);
+	}
+
+	return obj.send_changes(out err);
+}
+
+void recv_event(SyncObject obj, EventType type, out Syncml.Error err) {
 	switch (type) {
 		case EventType.ERROR:
 			debug("An error occured :-/");
@@ -23,14 +33,14 @@ void recv_event(SyncObject obj, EventType type) {
 		case EventType.GOT_ALL_ALERTS:
 			debug("Got all alerts from remote");
 			if (sessionType == SessionType.CLIENT) {
-				debug("Sending changes...");
+				send_changes(obj, out err);
 			}
 			break;
 
 		case EventType.GOT_ALL_CHANGES:
 			debug("Got all changes from remote");
 			if (sessionType == SessionType.SERVER) {
-				debug("Sending changes...");
+				send_changes(obj, out err);
 			}
 			break;
 
