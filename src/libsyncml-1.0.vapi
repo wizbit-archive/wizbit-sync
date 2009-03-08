@@ -46,7 +46,7 @@ namespace Syncml {
 	[CCode (cname="SmlLocation", cheader_filename="libsyncml/sml_elements.h", ref_function="smlLocationRef", unref_function="smlLocationUnref")]
 	public class Location {
 		[CCode (cname="smlLocationNew")]
-		public Location(string locURI, string locName, ref Error err);
+		public Location(string locURI, string locName, out Error err);
 
 		[CCode (cname="smlLocationGetURI")]
 		public string get_uri();
@@ -111,45 +111,45 @@ namespace Syncml {
 		[CCode (cname="SmlDataSyncEventCallback")]
 		public delegate void EventCallback(SyncObject object, EventType type, void *userdata, Error *error);
 		[CCode (cname="SmlDataSyncGetAlertTypeCallback")]
-		public delegate AlertType GetAlertTypeCallback(SyncObject object, string source, AlertType type, void *userdata, ref Error err);
+		public delegate AlertType GetAlertTypeCallback(SyncObject object, string source, AlertType type, void *userdata, out Error err);
 		[CCode (cname="SmlDataSyncChangeCallback")]
-		public delegate bool ChangeCallback(SyncObject object, string source, ChangeType type, string uid, char *data, unsigned int size, void *userdata, ref Error error);
+		public delegate bool ChangeCallback(SyncObject object, string source, ChangeType type, string uid, char *data, unsigned int size, void *userdata, out Error error);
 		[CCode (cname="SmlDataSyncChangeStatusCallback")]
-		public delegate bool ChangeStatusCallback(SyncObject object, uint code, string newuid, void *userdata, ref Error error);
+		public delegate bool ChangeStatusCallback(SyncObject object, uint code, string newuid, void *userdata, out Error error);
 		[CCode (cname="SmlDataSyncGetAnchorCallback")]
-		public delegate string GetAnchorCallback(SyncObject object, string name, void *userdata, ref Error error);
+		public delegate string GetAnchorCallback(SyncObject object, string name, void *userdata, out Error error);
 		[CCode (cname="SmlDataSyncSetAnchorCallback")]
-		public delegate bool SetAnchorCallback(SyncObject object, string name, string value, void *userdata, ref Error error);
+		public delegate bool SetAnchorCallback(SyncObject object, string name, string value, void *userdata, out Error error);
 		[CCode (cname="SmlWriteDevInfCallback")]
-		public delegate bool WriteDevInfCallback(SyncObject object, DevInf devinf, void *userdate, ref Error error);
+		public delegate bool WriteDevInfCallback(SyncObject object, DevInf devinf, void *userdate, out Error error);
 		[CCode (cname="SmlReadDevInfCallback")]
-		public delegate DevInf ReadDevInfCallback(SyncObject object, string devid, void *userdata, ref Error error);
+		public delegate DevInf ReadDevInfCallback(SyncObject object, string devid, void *userdata, out Error error);
 		[CCode (cname="HandleRemoteDevInfCallback")]
-		public delegate bool HandleRemoteDevInfCallback(SyncObject object, DevInf devinf, void *userdata, ref Error error);
+		public delegate bool HandleRemoteDevInfCallback(SyncObject object, DevInf devinf, void *userdata, out Error error);
 
 		[CCode (cname="SmlDataSyncObject", ref_function="smlDataSyncObjectRef", unref_function="smlDataSyncObjectUnref")]
 		public class SyncObject {
 			[CCode (cname="SmlDataSyncObjectNew")]
-			public SyncObject(SessionType dsType, TransportType tspType, ref Error err);
+			public SyncObject(SessionType dsType, TransportType tspType, out Error err);
 			[CCode (cname="smlDataSyncSetOption")]
-			public bool set_option(string name, string value, ref Error err);
+			public bool set_option(string name, string value, out Error err);
 			[CCode (cname="smlDataSyncSendChanges")]
-			public bool add_datastore(string contentType, string target, string source, ref Error err);
+			public bool add_datastore(string contentType, string target, string source, out Error err);
 
 			[CCode (cname="smlDataSyncInit")]
-			public init(ref Error err);
+			public init(out Error err);
 			[CCode (cname="smlDataSyncRun")]
-			public run(ref Error err);
+			public run(out Error err);
 
 			[CCode (cname="smlDataSyncAddChange")]
-			public bool add_change(string source, ChangeType type, string name, char *data, unsigned int size, void *userdata, ref Error error);
+			public bool add_change(string source, ChangeType type, string name, char *data, unsigned int size, void *userdata, out Error error);
 			[CCode (cname="smlDataSyncSendChanges")]
-			public bool send_changes(ref Error err);
+			public bool send_changes(out Error err);
 			[CCode (cname="smlDataSyncAddMapping")]
-			public bool add_mapping(string source, string remote_id, string local_id, ref Error err);
+			public bool add_mapping(string source, string remote_id, string local_id, out Error err);
 
 			[CCode (cname="smlDataSyncGetTarget")]
-			Location get_target(ref Error err);
+			Location get_target(out Error err);
 
 			[CCode (cname="smlDataSyncRegisterEventCallback")]
 			public void register_event_callback(EventCallback callback);
