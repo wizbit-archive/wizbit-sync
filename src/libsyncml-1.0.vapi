@@ -19,6 +19,41 @@ namespace Syncml {
 
 	[CCode (cheader_filename="libsyncml/data_sync_api/standard.h")]
 	namespace DataSync {
+
+		[CCode (cprefix="SML_DATA_SYNC_CONFIG_")]
+		namespace Config {
+			public string ConnectionType;
+			public string ConnectionSerial;
+			public string ConnectionBluetooth;
+			public string ConnectionIrda;
+			public string ConnectionNet;
+			public string ConnectionUsb;
+
+			public string AuthUsername;
+			public string AuthPassword;
+			public string AuthType;
+			public string AuthBasic;
+			public string AuthNone;
+			public string AuthMd5;
+
+			public string ConfigVersion;
+			public string ConfigIdentifier;
+
+			public string UseWbxml;
+			public string UseStringTable;
+			public string UseTimestampAnchor;
+			public string UseNumberOfChanges;
+			public string UseLocalTime;
+			public string OnlyReplace;
+			public string MaxMsgSize;
+			public string MaxObjSize;
+
+			public string FakeDevice;
+			public string FakeManufacturer;
+			public string FakeModel;
+			public string FakeSoftwareVersion;
+		}
+
 		[CCode (cprefix="SML_DATA_SYNC_EVENT_")]
 		public enum EventTypes {
 			ERROR,
