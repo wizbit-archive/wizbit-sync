@@ -133,8 +133,11 @@ namespace Syncml {
 		[CCode (cname="HandleRemoteDevInfCallback", instance_pos=2.1)]
 		public delegate bool HandleRemoteDevInfCallback(SyncObject object, DevInf devinf, out Error error);
 
-		[CCode (cname="SmlDataSyncObject", ref_function="smlDataSyncObjectRef", unref_function="smlDataSyncObjectUnref")]
+		[CCode (cname="SmlDataSyncObject", ref_function="smlDataSyncObjectRef", unref_function="smlDataSyncObjectUnrefHelper")]
 		public class SyncObject {
+			[CCode (cname="smlDataSyncObjectUnref")]
+			public static void unref(SyncObject *object);
+
 			[CCode (cname="smlDataSyncNew")]
 			public SyncObject(SessionType dsType, TransportType tspType, out Error err);
 			[CCode (cname="smlDataSyncSetOption")]
