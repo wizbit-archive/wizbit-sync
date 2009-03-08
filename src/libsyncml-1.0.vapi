@@ -1,12 +1,18 @@
 
 namespace Syncml {
 
-	[CCode (cname="SmlSessionType")]
-	class SessionType {
+	[CCode (cname="SmlSessionType", cprefix="SML_SESSION_TYPE_")]
+	public enum SessionType {
+		SERVER,
+		CLIENT
 	}
 
-	[CCode (cname="SmlTransportType")]
-	class TransportType {
+	[CCode (cname="SmlTransportType", cprefix="SML_TRANSPORT_TYPE_")]
+	public enum TransportType {
+		OBEX_CLIENT,
+		OBEX_SERVER,
+		HTTP_CLIENT,
+		HTTP_SERVER
 	}
 
 	[CCode (cname="SmlLocation")]
