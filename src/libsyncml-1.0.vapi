@@ -7,7 +7,7 @@ namespace Syncml {
 		CLIENT
 	}
 
-	[CCode (cname="SmlTransportType", cprefix="SML_TRANSPORT_TYPE_", cheader_filename="libsyncml/sml_defines.h")]
+	[CCode (cname="SmlTransportType", cprefix="SML_TRANSPORT_", cheader_filename="libsyncml/sml_defines.h")]
 	public enum TransportType {
 		OBEX_CLIENT,
 		OBEX_SERVER,
@@ -56,8 +56,12 @@ namespace Syncml {
 		public void set_name(string name);
 	}
 
+	[CCode (cname="SmlDevInf")]
+	public class DevInf {
+	}
+
 	[CCode (cname="SmlError")]
-	class Error {
+	public class Error {
 	}
 
 	[CCode (cheader_filename="libsyncml/data_sync_api/standard.h")]
@@ -113,7 +117,7 @@ namespace Syncml {
 		[CCode (cname="SmlDataSyncGetAlertTypeCallback")]
 		public delegate AlertType GetAlertTypeCallback(SyncObject object, string source, AlertType type, void *userdata, out Error err);
 		[CCode (cname="SmlDataSyncChangeCallback")]
-		public delegate bool ChangeCallback(SyncObject object, string source, ChangeType type, string uid, char *data, unsigned int size, void *userdata, out Error error);
+		public delegate bool ChangeCallback(SyncObject object, string source, ChangeType type, string uid, char *data, uint size, void *userdata, out Error error);
 		[CCode (cname="SmlDataSyncChangeStatusCallback")]
 		public delegate bool ChangeStatusCallback(SyncObject object, uint code, string newuid, void *userdata, out Error error);
 		[CCode (cname="SmlDataSyncGetAnchorCallback")]
@@ -137,12 +141,12 @@ namespace Syncml {
 			public bool add_datastore(string contentType, string target, string source, out Error err);
 
 			[CCode (cname="smlDataSyncInit")]
-			public init(out Error err);
+			public bool init(out Error err);
 			[CCode (cname="smlDataSyncRun")]
-			public run(out Error err);
+			public bool run(out Error err);
 
 			[CCode (cname="smlDataSyncAddChange")]
-			public bool add_change(string source, ChangeType type, string name, char *data, unsigned int size, void *userdata, out Error error);
+			public bool add_change(string source, ChangeType type, string name, char *data, uint size, void *userdata, out Error error);
 			[CCode (cname="smlDataSyncSendChanges")]
 			public bool send_changes(out Error err);
 			[CCode (cname="smlDataSyncAddMapping")]
@@ -166,7 +170,7 @@ namespace Syncml {
 			[CCode (cname="smlDataSyncRegisterReadDevInfCallback")]
 			public void register_read_devinf_callback(ReadDevInfCallback callback);
 			[CCode (cname="smlDataSyncRegisterHandleRemoteDevInfCallback")]
-			public void register_handle_remote_devinf_callback(HandeRemoteDevInfCallback callback);
+			public void register_handle_remote_devinf_callback(HandleRemoteDevInfCallback callback);
 
 			[CCode (cname="smlDataSyncRegisterChangeStatusCallback", delegate_target_position="0")]
 			public void register_change_status_callback(ChangeStatusCallback callback);
