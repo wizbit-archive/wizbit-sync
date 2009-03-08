@@ -152,24 +152,24 @@ namespace Syncml {
 			Location get_target(ref Error err);
 
 			[CCode (cname="smlDataSyncRegisterEventCallback")]
-			public void register_event_callback(EventCallback callback, void *userdata);
+			public void register_event_callback(EventCallback callback);
 			[CCode (cname="smlDataSyncRegisterGetAlertTypeCallback")]
-			public void register_get_alert_type_callback(GetAlertTypeCallback callback, void *userdata);
+			public void register_get_alert_type_callback(GetAlertTypeCallback callback);
 			[CCode (cname="smlDataSyncRegisterChangeCallback")]
-			public void register_change_callback(ChangeCallback callback, void *userdata);
+			public void register_change_callback(ChangeCallback callback);
 			[CCode (cname="smlDataSyncRegisterGetAnchorCallback")]
-			public void register_get_anchor_callback(GetAnchorCallback callback, void *userdata);
+			public void register_get_anchor_callback(GetAnchorCallback callback);
 			[CCode (cname="smlDataSyncRegisterSetAnchorCallback")]
-			public void register_set_anchor_callback(SetAnchorCallback callback, void *userdata);
+			public void register_set_anchor_callback(SetAnchorCallback callback);
 			[CCode (cname="smlDataSyncRegisterWriteDevInfCallback")]
-			public void register_write_devinf_callback(WriteDevInfCallback callback, void *userdata);
+			public void register_write_devinf_callback(WriteDevInfCallback callback);
 			[CCode (cname="smlDataSyncRegisterReadDevInfCallback")]
-			public void register_read_devinf_callback(ReadDevInfCallback callback, void *userdata);
+			public void register_read_devinf_callback(ReadDevInfCallback callback);
 			[CCode (cname="smlDataSyncRegisterHandleRemoteDevInfCallback")]
-			public void register_handle_remote_devinf_callback(HandeRemoteDevInfCallback callback, void *userdata);
+			public void register_handle_remote_devinf_callback(HandeRemoteDevInfCallback callback);
 
-			[CCode (cname="smlDataSyncRegisterChangeStatusCallback")]
-			public void register_change_status_callback(ChangeStatusCallback callback, void *userdata);
+			[CCode (cname="smlDataSyncRegisterChangeStatusCallback", delegate_target_position="0")]
+			public void register_change_status_callback(ChangeStatusCallback callback);
 		}
 	}
 }
