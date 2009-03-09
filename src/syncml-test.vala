@@ -56,7 +56,11 @@ void recv_event(SyncObject obj, EventType type, out Syncml.Error err) {
 }
 
 AlertType recv_alert_type(SyncObject obj, string source, AlertType type) {
-	return 0;
+	// The alert type seems to be entirely about whether or not we are doing a slow sync - at least thats
+	// all the other implementations care about
+
+	alertType = type;
+	return type;;
 }
 
 bool recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
@@ -75,11 +79,12 @@ bool recv_change(SyncObject obj, string source, ChangeType type, string uid, cha
 		}
 	}
 
-	return return true;
+	return true;
 }
 
 SessionType sessionType;
 TransportType transportType;
+AlertType alertType;
 
 static int main(string[] args) {
 	Syncml.Error e;
