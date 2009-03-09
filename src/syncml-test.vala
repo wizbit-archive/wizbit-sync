@@ -60,7 +60,22 @@ AlertType recv_alert_type(SyncObject obj, string source, AlertType type) {
 }
 
 bool recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
-	return false;
+	
+	// Find a datastore called 'source' here....
+
+	// is this slow sync? then check contents are same
+	// if not, check for conflicts
+	
+	// COMMIT CHANGE!!
+
+	if (sessionType == SessionType.CLIENT) {
+		if (!obj.add_mapping(source, uid, "our fricking uid", out err)) {
+			critical("Adding a mapping failed :-/");
+			return false;
+		}
+	}
+
+	return return true;
 }
 
 SessionType sessionType;
