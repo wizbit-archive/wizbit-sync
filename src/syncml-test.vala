@@ -2,6 +2,11 @@
 using Syncml;
 using Syncml.DataSync;
 
+SessionType sessionType;
+TransportType transportType;
+AlertType alertType;
+Mutex mutex;
+
 bool send_changes(SyncObject obj, out Syncml.Error err) {
 	debug("Sending changes to remote...");
 
@@ -98,11 +103,6 @@ bool recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
 	debug("Received device information");
 	return true;
 }
-
-SessionType sessionType;
-TransportType transportType;
-AlertType alertType;
-Mutex mutex;
 
 static int main(string[] args) {
 	Syncml.Error e;
