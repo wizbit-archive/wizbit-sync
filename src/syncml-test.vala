@@ -93,6 +93,11 @@ bool recv_change_status(SyncObject obj, uint code, string newuid, out Syncml.Err
 	return true;
 }
 
+bool recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
+	debug("Received device information");
+	return true;
+}
+
 SessionType sessionType;
 TransportType transportType;
 AlertType alertType;
@@ -109,6 +114,7 @@ static int main(string[] args) {
 	so.register_get_alert_type_callback(recv_alert_type);
 	so.register_change_callback(recv_change);
 	so.register_change_status_callback(recv_change_status);
+	so.register_handle_remote_devinf_callback(recv_devinf);
 
 	if (!so.init(out e))
 		return 1;
