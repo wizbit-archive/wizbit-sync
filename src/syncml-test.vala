@@ -59,7 +59,7 @@ AlertType recv_alert_type(SyncObject obj, string source, AlertType type) {
 	return 0;
 }
 
-bool recv_change(SyncObject obj) {
+bool recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
 	return false;
 }
 
