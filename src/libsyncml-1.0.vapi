@@ -78,6 +78,9 @@ namespace Syncml {
 			public const string CONNECTION_NET;
 			public const string CONNECTION_USB;
 
+			[CCode (cname="SML_TRANSPORT_CONFIG_PORT")]
+			public const string TRANSPORT_PORT;
+
 			public const string AUTH_USERNAME;
 			public const string AUTH_PASSWORD;
 			public const string AUTH_TYPE;

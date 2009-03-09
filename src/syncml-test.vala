@@ -28,6 +28,7 @@ void recv_event(SyncObject obj, EventType type, out Syncml.Error err) {
 
 		case EventType.FINISHED:
 			debug("Session finished...");
+			mutex.unlock();
 			break;
 
 		case EventType.GOT_ALL_ALERTS:
@@ -101,6 +102,7 @@ bool recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
 SessionType sessionType;
 TransportType transportType;
 AlertType alertType;
+Mutex mutex;
 
 static int main(string[] args) {
 	Syncml.Error e;
@@ -109,6 +111,8 @@ static int main(string[] args) {
 	transportType = TransportType.HTTP_SERVER;
 
 	var so = new SyncObject(sessionType, transportType, out e);
+
+	so.set_option(Config.TRANSPORT_PORT, "8080", out e);
 
 	so.register_event_callback(recv_event);
 	so.register_get_alert_type_callback(recv_alert_type);
@@ -121,6 +125,12 @@ static int main(string[] args) {
 
 	if (!so.run(out e))
 		return 1;
+
+	mutex = new Mutex();
+	mutex.lock();
+	mutex.lock();
+	mutex.unlock();
+	mutex = null;
 
 	return 0;
 }
