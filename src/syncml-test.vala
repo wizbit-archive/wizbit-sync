@@ -70,7 +70,7 @@ bool recv_change(SyncObject obj, string source, ChangeType type, string uid, cha
 	// is this slow sync? then check contents are same
 	// if not, check for conflicts
 	
-	// COMMIT CHANGE!!
+	// FIXME: COMMIT CHANGE!!
 
 	if (sessionType == SessionType.CLIENT) {
 		if (!obj.add_mapping(source, uid, "our fricking uid", out err)) {
@@ -78,6 +78,17 @@ bool recv_change(SyncObject obj, string source, ChangeType type, string uid, cha
 			return false;
 		}
 	}
+
+	return true;
+}
+
+bool recv_change_status(SyncObject obj, uint code, string newuid, out Syncml.Error err) {
+	if (code < 200 || 299 < code) {
+		error("An error occurred committing our change :-/");
+		return false;
+	}
+
+	// FIXME: link newuid against our version of the data...
 
 	return true;
 }
@@ -97,6 +108,7 @@ static int main(string[] args) {
 	so.register_event_callback(recv_event);
 	so.register_get_alert_type_callback(recv_alert_type);
 	so.register_change_callback(recv_change);
+	so.register_change_status_callback(recv_change_status);
 
 	if (!so.init(out e))
 		return 1;
