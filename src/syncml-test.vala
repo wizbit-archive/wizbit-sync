@@ -1,11 +1,13 @@
 
 using Syncml;
 using Syncml.DataSync;
+using Wiz;
 
 SessionType sessionType;
 TransportType transportType;
 AlertType alertType;
 Mutex mutex;
+Wiz.Store store;
 
 bool send_changes(SyncObject obj, out Syncml.Error err) {
 	debug("Sending changes to remote...");
@@ -75,8 +77,15 @@ bool recv_change(SyncObject obj, string source, ChangeType type, string uid, cha
 
 	// is this slow sync? then check contents are same
 	// if not, check for conflicts
-	
-	// FIXME: COMMIT CHANGE!!
+
+	// FIXME: Should really have some kind of mapping between uid and wizbit uuid...
+
+	var bit = store.open_bit(uid);
+	var cb = bit.primary_tip.get_commit_builder();
+	var f = new Wiz.File();
+	f.set_contents((string)data, size);
+	cb.streams.set("data", f);
+	var nc = cb.commit();
 
 	if (sessionType == SessionType.CLIENT) {
 		if (!obj.add_mapping(source, uid, "our fricking uid", out err)) {
@@ -106,6 +115,8 @@ bool recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
 
 static int main(string[] args) {
 	Syncml.Error e;
+
+	store = new Wiz.Store("", null);
 
 	sessionType = SessionType.CLIENT;
 	transportType = TransportType.HTTP_SERVER;
