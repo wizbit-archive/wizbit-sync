@@ -122,7 +122,7 @@ class SyncmlProvider {
 	int run() {
 		Syncml.Error e;
 
-		store = new Wiz.Store("", null);
+		store = new Wiz.Store("FAIL");
 
 		sessionType = SessionType.CLIENT;
 		transportType = TransportType.HTTP_SERVER;
