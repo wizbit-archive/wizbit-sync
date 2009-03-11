@@ -122,7 +122,7 @@ class SyncmlProvider {
 	int run() {
 		Syncml.Error e;
 
-		store = new Wiz.Store("FAIL");
+		store = new Wiz.Store("", Path.build_filename(Environment.get_home_dir(), "sync"));
 
 		sessionType = SessionType.CLIENT;
 		transportType = TransportType.HTTP_SERVER;
