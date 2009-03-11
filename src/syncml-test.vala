@@ -119,7 +119,7 @@ class SyncmlProvider {
 		return true;
 	}
 
-	int run() {
+	public int run() {
 		Syncml.Error e;
 
 		store = new Wiz.Store("", Path.build_filename(Environment.get_home_dir(), "sync"));
@@ -153,9 +153,9 @@ class SyncmlProvider {
 
 		return 0;
 	}	
+}
 
-	static int main(string[] args) {
-		var provider = new SyncmlProvider();
-		return provider.run();
-	}
+static int main(string[] args) {
+	var provider = new SyncmlProvider();
+	return provider.run();
 }
