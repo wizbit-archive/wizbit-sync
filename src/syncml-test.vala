@@ -21,6 +21,8 @@ class SyncmlProvider {
 	}
 
 	private void handle_recv_event(SyncObject obj, EventType type, out Syncml.Error err) {
+		debug("handle_recv_event");
+
 		switch (type) {
 			case EventType.ERROR:
 				debug("An error occured :-/");
@@ -67,13 +69,14 @@ class SyncmlProvider {
 	private AlertType handle_recv_alert_type(SyncObject obj, string source, AlertType type) {
 		// The alert type seems to be entirely about whether or not we are doing a slow sync - at least thats
 		// all the other implementations care about
-
+		debug("handle_recv_alert_type");
 		alertType = type;
 		return type;;
 	}
 
 	private bool handle_recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
-	
+		debug("handle_recv_change");
+
 		// Find a datastore called 'source' here....
 
 		// is this slow sync? then check contents are same
@@ -99,6 +102,8 @@ class SyncmlProvider {
 	}
 
 	private bool handle_recv_change_status(SyncObject obj, uint code, string newuid, out Syncml.Error err) {
+		debug("handle_recv_change_status");
+
 		if (code < 200 || 299 < code) {
 			error("An error occurred committing our change :-/");
 			return false;
@@ -110,7 +115,7 @@ class SyncmlProvider {
 	}
 
 	private bool handle_recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
-		debug("Received device information");
+		debug("handle_recv_devinf");
 		return true;
 	}
 
