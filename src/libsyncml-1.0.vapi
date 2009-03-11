@@ -56,8 +56,49 @@ namespace Syncml {
 		public void set_name(string name);
 	}
 
-	[CCode (cname="SmlDevInf")]
+	[CCode (cname="SmlDevInf", cheader_filename="libsyncml/sml_devinf.h", ref_function="smlDevInfRef", unref_function="smlDevInfUnref")]
 	public class DevInf {
+		public string manufacturer {
+			[CCode (cname="smlDevInfGetManufacturer")] get;
+			[CCode (cname="smlDefInfSetManufacturer")] set;
+		}
+		public string model {
+			[CCode (cname="smlDevInfGetModel")] get;
+			[CCode (cname="smlDevInfSetModel")] set;
+		}
+		public string oem {
+			[CCode (cname="smlDevInfGetOEM")] get;
+			[CCode (cname="smlDefInfSetOEM")] set;
+		}
+		public string firmware_version {
+			[CCode (cname="smlDevInfGetFirmwareVersion")] get;
+			[CCode (cname="smlDevInfSetFirmwareVersion")] set;
+		}
+		public string software_version {
+			[CCode (cname="smlDevInfGetSoftwareVersion")] get;
+			[CCode (cname="smlDevInfSetSoftwareVersion")] set;
+		}
+		public string hardware_version {
+			[CCode (cname="smlDevInfGetHardwareVersion")] get;
+			[CCode (cname="smlDevInfSetHardwareVersion")] set;
+		}
+		public string device_id {
+			[CCode (cname="smlDevInfGetDeviceID")] get;
+			[CCode (cname="smlDevInfSetDeviceID")] set;
+		}
+		/* DeviceType */
+		public bool supports_utc {
+			[CCode (cname="smlDevInfSupportsUTC")] get;
+			[CCode (cname="smlDevInfSetSupportsUTC")] set;
+		}
+		public bool supports_large_objs {
+			[CCode (cname="smlDevInfSupportsLargeObjs")] get;
+			[CCode (cname="smlDevInfSetSupportsLargeObjs")] set;
+		}
+		public bool supports_num_changes {
+			[CCode (cname="smlDevInfSupportsNumberOfChanges")] get;
+			[CCode (cname="smlDevInfSetSupportsNumberOfChanges")] set;
+		}
 	}
 
 	[CCode (cname="SmlError", cheader_filename="libsyncml/syncml.h,libsyncml-1.0.h", ref_function="smlErrorRef", unref_function="smlErrorUnrefHelper")]

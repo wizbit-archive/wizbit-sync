@@ -116,6 +116,16 @@ class SyncmlProvider {
 
 	private bool handle_recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
 		debug("handle_recv_devinf");
+		debug("Manufacturer: %s", inf.manufacturer);
+		debug("Model: %s", inf.model);
+		debug("OEM: %s", inf.oem);
+		debug("Firmware Version: %s", inf.firmware_version);
+		debug("Software Version: %s", inf.software_version);
+		debug("Hardware Version: %s", inf.hardware_version);
+		debug("Device ID: %s", inf.device_id);
+		debug("Supports UTC: %b", inf.supports_utc);
+		debug("Supports Largs Objs: %b", inf.supports_large_objs);
+		debug("Supports Num Changes: %b", inf.supports_num_changes);
 		return true;
 	}
 
