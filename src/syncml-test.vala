@@ -3,145 +3,152 @@ using Syncml;
 using Syncml.DataSync;
 using Wiz;
 
-SessionType sessionType;
-TransportType transportType;
-AlertType alertType;
-Mutex mutex;
-Wiz.Store store;
+class SyncmlProvider {
+	SessionType sessionType;
+	TransportType transportType;
+	AlertType alertType;
+	Mutex mutex;
+	Wiz.Store store;
 
-bool send_changes(SyncObject obj, out Syncml.Error err) {
-	debug("Sending changes to remote...");
+	bool send_changes(SyncObject obj, out Syncml.Error err) {
+		debug("Sending changes to remote...");
 
-	while (false) {
-		// obj.add_change(obj, source, changetype, filename, buf, length, null, out err);
+		while (false) {
+			// obj.add_change(obj, source, changetype, filename, buf, length, null, out err);
+		}
+
+		return obj.send_changes(out err);
 	}
 
-	return obj.send_changes(out err);
-}
+	void recv_event(SyncObject obj, EventType type, out Syncml.Error err) {
+		switch (type) {
+			case EventType.ERROR:
+				debug("An error occured :-/");
+				break;
 
-void recv_event(SyncObject obj, EventType type, out Syncml.Error err) {
-	switch (type) {
-		case EventType.ERROR:
-			debug("An error occured :-/");
-			break;
+			case EventType.CONNECT:
+				debug("Remote connected");
+				break;
 
-		case EventType.CONNECT:
-			debug("Remote connected");
-			break;
+			case EventType.DISCONNECT:
+				debug("Remote disconnected");
+				break;
 
-		case EventType.DISCONNECT:
-			debug("Remote disconnected");
-			break;
+			case EventType.FINISHED:
+				debug("Session finished...");
+				mutex.unlock();
+				break;
 
-		case EventType.FINISHED:
-			debug("Session finished...");
-			mutex.unlock();
-			break;
+			case EventType.GOT_ALL_ALERTS:
+				debug("Got all alerts from remote");
+				if (sessionType == SessionType.CLIENT) {
+					send_changes(obj, out err);
+				}
+				break;
 
-		case EventType.GOT_ALL_ALERTS:
-			debug("Got all alerts from remote");
-			if (sessionType == SessionType.CLIENT) {
-				send_changes(obj, out err);
-			}
-			break;
+			case EventType.GOT_ALL_CHANGES:
+				debug("Got all changes from remote");
+				if (sessionType == SessionType.SERVER) {
+					send_changes(obj, out err);
+				}
+				break;
 
-		case EventType.GOT_ALL_CHANGES:
-			debug("Got all changes from remote");
-			if (sessionType == SessionType.SERVER) {
-				send_changes(obj, out err);
-			}
-			break;
+			case EventType.GOT_ALL_MAPPINGS:
+				assert(sessionType == SessionType.SERVER);
+				debug("All mappings received");
+				break;
 
-		case EventType.GOT_ALL_MAPPINGS:
-			assert(sessionType == SessionType.SERVER);
-			debug("All mappings received");
-			break;
-
-		default:
-			critical("Unknown event (%d)", type);
-			break;
-	}
-}
-
-AlertType recv_alert_type(SyncObject obj, string source, AlertType type) {
-	// The alert type seems to be entirely about whether or not we are doing a slow sync - at least thats
-	// all the other implementations care about
-
-	alertType = type;
-	return type;;
-}
-
-bool recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
-	
-	// Find a datastore called 'source' here....
-
-	// is this slow sync? then check contents are same
-	// if not, check for conflicts
-
-	// FIXME: Should really have some kind of mapping between uid and wizbit uuid...
-
-	var bit = store.open_bit(uid);
-	var cb = bit.primary_tip.get_commit_builder();
-	var f = new Wiz.File();
-	f.set_contents((string)data, size);
-	cb.streams.set("data", f);
-	var nc = cb.commit();
-
-	if (sessionType == SessionType.CLIENT) {
-		if (!obj.add_mapping(source, uid, "our fricking uid", out err)) {
-			critical("Adding a mapping failed :-/");
-			return false;
+			default:
+				critical("Unknown event (%d)", type);
+				break;
 		}
 	}
 
-	return true;
-}
+	AlertType recv_alert_type(SyncObject obj, string source, AlertType type) {
+		// The alert type seems to be entirely about whether or not we are doing a slow sync - at least thats
+		// all the other implementations care about
 
-bool recv_change_status(SyncObject obj, uint code, string newuid, out Syncml.Error err) {
-	if (code < 200 || 299 < code) {
-		error("An error occurred committing our change :-/");
-		return false;
+		alertType = type;
+		return type;;
 	}
 
-	// FIXME: link newuid against our version of the data...
+	bool recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
+	
+		// Find a datastore called 'source' here....
 
-	return true;
-}
+		// is this slow sync? then check contents are same
+		// if not, check for conflicts
 
-bool recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
-	debug("Received device information");
-	return true;
-}
+		// FIXME: Should really have some kind of mapping between uid and wizbit uuid...
 
-static int main(string[] args) {
-	Syncml.Error e;
+		var bit = store.open_bit(uid);
+		var cb = bit.primary_tip.get_commit_builder();
+		var f = new Wiz.File();
+		f.set_contents((string)data, size);
+		cb.streams.set("data", f);
+		var nc = cb.commit();
 
-	store = new Wiz.Store("", null);
+		if (sessionType == SessionType.CLIENT) {
+			if (!obj.add_mapping(source, uid, "our fricking uid", out err)) {
+				critical("Adding a mapping failed :-/");
+				return false;
+			}
+		}
 
-	sessionType = SessionType.CLIENT;
-	transportType = TransportType.HTTP_SERVER;
+		return true;
+	}
 
-	var so = new SyncObject(sessionType, transportType, out e);
+	bool recv_change_status(SyncObject obj, uint code, string newuid, out Syncml.Error err) {
+		if (code < 200 || 299 < code) {
+			error("An error occurred committing our change :-/");
+			return false;
+		}
 
-	so.set_option(Config.TRANSPORT_PORT, "8080", out e);
+		// FIXME: link newuid against our version of the data...
 
-	so.register_event_callback(recv_event);
-	so.register_get_alert_type_callback(recv_alert_type);
-	so.register_change_callback(recv_change);
-	so.register_change_status_callback(recv_change_status);
-	so.register_handle_remote_devinf_callback(recv_devinf);
+		return true;
+	}
 
-	if (!so.init(out e))
-		return 1;
+	bool recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
+		debug("Received device information");
+		return true;
+	}
 
-	if (!so.run(out e))
-		return 1;
+	int run() {
+		Syncml.Error e;
 
-	mutex = new Mutex();
-	mutex.lock();
-	mutex.lock();
-	mutex.unlock();
-	mutex = null;
+		store = new Wiz.Store("", null);
 
-	return 0;
+		sessionType = SessionType.CLIENT;
+		transportType = TransportType.HTTP_SERVER;
+
+		var so = new SyncObject(sessionType, transportType, out e);
+
+		so.set_option(Config.TRANSPORT_PORT, "8080", out e);
+
+		so.register_event_callback(recv_event);
+		so.register_get_alert_type_callback(recv_alert_type);
+		so.register_change_callback(recv_change);
+		so.register_change_status_callback(recv_change_status);
+		so.register_handle_remote_devinf_callback(recv_devinf);
+
+		if (!so.init(out e))
+			return 1;
+
+		if (!so.run(out e))
+			return 1;
+
+		mutex = new Mutex();
+		mutex.lock();
+		mutex.lock();
+		mutex.unlock();
+		mutex = null;
+
+		return 0;
+	}	
+
+	static int main(string[] args) {
+		var provider = new SyncmlProvider();
+		return provider.run();
+	}
 }
