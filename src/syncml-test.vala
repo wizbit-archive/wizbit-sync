@@ -4,13 +4,13 @@ using Syncml.DataSync;
 using Wiz;
 
 class SyncmlProvider {
-	SessionType sessionType;
-	TransportType transportType;
-	AlertType alertType;
-	Mutex mutex;
-	Wiz.Store store;
+	private SessionType sessionType;
+	private TransportType transportType;
+	private AlertType alertType;
+	private Mutex mutex;
+	private Wiz.Store store;
 
-	bool send_changes(SyncObject obj, out Syncml.Error err) {
+	private bool send_changes(SyncObject obj, out Syncml.Error err) {
 		debug("Sending changes to remote...");
 
 		while (false) {
@@ -20,7 +20,7 @@ class SyncmlProvider {
 		return obj.send_changes(out err);
 	}
 
-	void recv_event(SyncObject obj, EventType type, out Syncml.Error err) {
+	private void handle_recv_event(SyncObject obj, EventType type, out Syncml.Error err) {
 		switch (type) {
 			case EventType.ERROR:
 				debug("An error occured :-/");
@@ -64,7 +64,7 @@ class SyncmlProvider {
 		}
 	}
 
-	AlertType recv_alert_type(SyncObject obj, string source, AlertType type) {
+	private AlertType handle_recv_alert_type(SyncObject obj, string source, AlertType type) {
 		// The alert type seems to be entirely about whether or not we are doing a slow sync - at least thats
 		// all the other implementations care about
 
@@ -72,7 +72,7 @@ class SyncmlProvider {
 		return type;;
 	}
 
-	bool recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
+	private bool handle_recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
 	
 		// Find a datastore called 'source' here....
 
@@ -98,7 +98,7 @@ class SyncmlProvider {
 		return true;
 	}
 
-	bool recv_change_status(SyncObject obj, uint code, string newuid, out Syncml.Error err) {
+	private bool handle_recv_change_status(SyncObject obj, uint code, string newuid, out Syncml.Error err) {
 		if (code < 200 || 299 < code) {
 			error("An error occurred committing our change :-/");
 			return false;
@@ -109,7 +109,7 @@ class SyncmlProvider {
 		return true;
 	}
 
-	bool recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
+	private bool handle_recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
 		debug("Received device information");
 		return true;
 	}
@@ -126,11 +126,11 @@ class SyncmlProvider {
 
 		so.set_option(Config.TRANSPORT_PORT, "8080", out e);
 
-		so.register_event_callback(recv_event);
-		so.register_get_alert_type_callback(recv_alert_type);
-		so.register_change_callback(recv_change);
-		so.register_change_status_callback(recv_change_status);
-		so.register_handle_remote_devinf_callback(recv_devinf);
+		so.register_event_callback(handle_recv_event);
+		so.register_get_alert_type_callback(handle_recv_alert_type);
+		so.register_change_callback(handle_recv_change);
+		so.register_change_status_callback(handle_recv_change_status);
+		so.register_handle_remote_devinf_callback(handle_recv_devinf);
 
 		if (!so.init(out e))
 			return 1;
