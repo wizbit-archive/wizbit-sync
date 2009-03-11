@@ -137,9 +137,11 @@ class SyncmlProvider {
 		so.register_change_status_callback(handle_recv_change_status);
 		so.register_handle_remote_devinf_callback(handle_recv_devinf);
 
+		debug("starting sync process...");
 		if (!so.init(out e))
 			return 1;
 
+		debug("running sync process...");
 		if (!so.run(out e))
 			return 1;
 
