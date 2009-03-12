@@ -59,7 +59,7 @@ namespace Syncml {
 	[CCode (cheader="libsyncml/sml_devinf.h")]
 	namespace Device {
 		[CCode (cname="SmlDevInfDevTyp", cheader_filename="libsyncml/sml_defines.h", cprefix="SML_DEVINF_DEVTYPE_")]
-		public enum DeviceType {
+		public enum Type {
 			UNKNOWN,
 			PAGER,
 			HANDHELD,
@@ -90,9 +90,9 @@ namespace Syncml {
 		}
 
 		[CCode (cname="SmlDevInf", ref_function="smlDevInfRef", unref_function="smlDevInfUnref")]
-		public class DeviceInfo {
+		public class Info {
 			[CCode (cname="smlDevInfNew")]
-			public DeviceInfo(string device_id, DeviceType device_type, out Syncml.Error err);
+			public Info(string device_id, Device.Type device_type, out Syncml.Error err);
 
 			public string manufacturer {
 				[CCode (cname="smlDevInfGetManufacturer")] get;
@@ -122,7 +122,7 @@ namespace Syncml {
 				[CCode (cname="smlDevInfGetDeviceID")] get;
 				[CCode (cname="smlDevInfSetDeviceID")] set;
 			}
-			public DeviceType device_type {
+			public Device.Type device_type {
 				[CCode (cname="smlDevInfGetDeviceType")] get;
 				[CCode (cname="smlDevInfSetDeviceType")] set;
 			}
@@ -211,11 +211,11 @@ namespace Syncml {
 		[CCode (cname="SmlDataSyncSetAnchorCallback", instance_pos=3.1)]
 		public delegate bool SetAnchorCallback(SyncObject object, string name, string value, out Error error);
 		[CCode (cname="SmlWriteDevInfCallback", instance_pos=2.1)]
-		public delegate bool WriteDevInfCallback(SyncObject object, Device.DeviceInfo devinf, out Error error);
+		public delegate bool WriteDevInfCallback(SyncObject object, Device.Info devinf, out Error error);
 		[CCode (cname="SmlReadDevInfCallback", instance_pos=2.1)]
-		public delegate Device.DeviceInfo ReadDevInfCallback(SyncObject object, string devid, out Error error);
+		public delegate Device.Info ReadDevInfCallback(SyncObject object, string devid, out Error error);
 		[CCode (cname="HandleRemoteDevInfCallback", instance_pos=2.1)]
-		public delegate bool HandleRemoteDevInfCallback(SyncObject object, Device.DeviceInfo devinf, out Error error);
+		public delegate bool HandleRemoteDevInfCallback(SyncObject object, Device.Info devinf, out Error error);
 
 		[CCode (cname="SmlDataSyncObject", ref_function="smlDataSyncObjectRef", unref_function="smlDataSyncObjectUnrefHelper")]
 		public class SyncObject {
