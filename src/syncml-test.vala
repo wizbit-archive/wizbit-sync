@@ -114,7 +114,7 @@ class SyncmlProvider {
 		return true;
 	}
 
-	private bool handle_recv_devinf(SyncObject obj, DevInf inf, out Syncml.Error err) {
+	private bool handle_recv_devinf(SyncObject obj, DeviceInfo inf, out Syncml.Error err) {
 		debug("handle_recv_devinf");
 		debug("Manufacturer: %s", inf.manufacturer);
 		debug("Model: %s", inf.model);

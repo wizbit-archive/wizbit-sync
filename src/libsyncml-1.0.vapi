@@ -69,9 +69,9 @@ namespace Syncml {
 	}
 
 	[CCode (cname="SmlDevInf", cheader_filename="libsyncml/sml_devinf.h", ref_function="smlDevInfRef", unref_function="smlDevInfUnref")]
-	public class DevInf {
+	public class DeviceInfo {
 		[CCode (cname="smlDevInfNew")]
-		public DevInf(string device_id, DeviceType device_type, out Syncml.Error err);
+		public DeviceInfo(string device_id, DeviceType device_type, out Syncml.Error err);
 
 		public string manufacturer {
 			[CCode (cname="smlDevInfGetManufacturer")] get;
@@ -189,11 +189,11 @@ namespace Syncml {
 		[CCode (cname="SmlDataSyncSetAnchorCallback", instance_pos=3.1)]
 		public delegate bool SetAnchorCallback(SyncObject object, string name, string value, out Error error);
 		[CCode (cname="SmlWriteDevInfCallback", instance_pos=2.1)]
-		public delegate bool WriteDevInfCallback(SyncObject object, DevInf devinf, out Error error);
+		public delegate bool WriteDevInfCallback(SyncObject object, DeviceInfo devinf, out Error error);
 		[CCode (cname="SmlReadDevInfCallback", instance_pos=2.1)]
-		public delegate DevInf ReadDevInfCallback(SyncObject object, string devid, out Error error);
+		public delegate DeviceInfo ReadDevInfCallback(SyncObject object, string devid, out Error error);
 		[CCode (cname="HandleRemoteDevInfCallback", instance_pos=2.1)]
-		public delegate bool HandleRemoteDevInfCallback(SyncObject object, DevInf devinf, out Error error);
+		public delegate bool HandleRemoteDevInfCallback(SyncObject object, DeviceInfo devinf, out Error error);
 
 		[CCode (cname="SmlDataSyncObject", ref_function="smlDataSyncObjectRef", unref_function="smlDataSyncObjectUnrefHelper")]
 		public class SyncObject {
