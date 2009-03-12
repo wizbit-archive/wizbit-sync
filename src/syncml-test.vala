@@ -155,6 +155,7 @@ class SyncmlProvider {
 		if (!so.run(out e))
 			return 1;
 
+		debug("blocking...");
 		mutex = new Mutex();
 		mutex.lock();
 		mutex.lock();
