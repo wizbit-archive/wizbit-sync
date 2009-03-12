@@ -138,6 +138,13 @@ namespace Syncml {
 				[CCode (cname="smlDevInfSupportsNumberOfChanges")] get;
 				[CCode (cname="smlDevInfSetSupportsNumberOfChanges")] set;
 			}
+
+			[CCode (cname="smlDevInfAddDataStore")]
+			public void add_datastore(DataStore store);
+			[CCode (cname="smlDevInfNumDataStores")]
+			public uint num_datastores();
+			[CCode (cname="smlDevInfGetNthDataStore")]
+			public DataStore get_nth(uint nth);
 		}
 	}
 
