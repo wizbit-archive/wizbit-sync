@@ -126,6 +126,10 @@ class SyncmlProvider {
 		debug("Supports UTC: %b", inf.supports_utc);
 		debug("Supports Largs Objs: %b", inf.supports_large_objs);
 		debug("Supports Num Changes: %b", inf.supports_num_changes);
+
+		for (uint i=0; i < inf.num_datastores(); i++)
+			debug("Location: %s", inf.get_nth_datastore(i).source_ref);
+
 		return true;
 	}
 

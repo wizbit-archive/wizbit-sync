@@ -144,7 +144,7 @@ namespace Syncml {
 			[CCode (cname="smlDevInfNumDataStores")]
 			public uint num_datastores();
 			[CCode (cname="smlDevInfGetNthDataStore")]
-			public DataStore get_nth(uint nth);
+			public DataStore get_nth_datastore(uint nth);
 		}
 	}
 
