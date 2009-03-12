@@ -93,7 +93,7 @@ class SyncmlProvider {
 		var nc = cb.commit();
 
 		if (sessionType == SessionType.CLIENT) {
-			if (!obj.add_mapping(source, uid, "our fricking uid", out err)) {
+			if (!obj.add_mapping(source, uid, nc.version_uuid, out err)) {
 				critical("Adding a mapping failed :-/");
 				return false;
 			}
