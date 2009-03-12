@@ -183,7 +183,7 @@ namespace Syncml {
 			public const string USE_STRING_TABLE;
 			public const string USE_TIMESTAMP_ANCHOR;
 			public const string USE_NUMBER_OF_CHANGES;
-			public const string USE_LOCAL_TIME;
+			public const string USE_LOCALTIME;
 			public const string ONLY_REPLACE;
 			public const string MAX_MSG_SIZE;
 			public const string MAX_OBJ_SIZE;

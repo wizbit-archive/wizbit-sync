@@ -4,6 +4,7 @@ using Syncml.DataSync;
 using Wiz;
 
 class SyncmlProvider {
+	private SyncObject syncobj;
 	private SessionType sessionType;
 	private TransportType transportType;
 	private AlertType alertType;
@@ -133,30 +134,56 @@ class SyncmlProvider {
 		return true;
 	}
 
+	public void setup_bluetooth(string address, string channel) {
+		Syncml.Error e;
+		this.syncobj = new SyncObject(SessionType.SERVER, TransportType.OBEX_CLIENT, out e);
+
+		this.syncobj.set_option(Config.CONNECTION_TYPE, Config.CONNECTION_BLUETOOTH, out e);
+		this.syncobj.set_option(Config.BLUETOOTH_ADDRESS, address, out e);
+		this.syncobj.set_option(Config.BLUETOOTH_CHANNEL, channel, out e);
+	}
+
+	public void use_string_table() {
+		assert(this.syncobj != null);
+		Syncml.Error e;
+		this.syncobj.set_option(Config.USE_STRING_TABLE, "1", out e);
+	}
+
+	public void use_number_anchor() {
+		assert(this.syncobj != null);
+		Syncml.Error e;
+		this.syncobj.set_option(Config.USE_TIMESTAMP_ANCHOR, "0", out e);
+	}
+
+	public void use_localtime() {
+		assert(this.syncobj != null);
+		Syncml.Error e;
+		this.syncobj.set_option(Config.USE_LOCALTIME, "1", out e);
+	}
+
+	public void disable_number_changes() {
+		assert(this.syncobj != null);
+		Syncml.Error e;
+		this.syncobj.set_option(Config.USE_NUMBER_OF_CHANGES, "0", out e);
+	}
+
 	public int run() {
 		Syncml.Error e;
 
 		store = new Wiz.Store("", Path.build_filename(Environment.get_home_dir(), "sync"));
 
-		sessionType = SessionType.CLIENT;
-		transportType = TransportType.HTTP_SERVER;
-
-		var so = new SyncObject(sessionType, transportType, out e);
-
-		so.set_option(Config.TRANSPORT_PORT, "8080", out e);
-
-		so.register_event_callback(handle_recv_event);
-		so.register_get_alert_type_callback(handle_recv_alert_type);
-		so.register_change_callback(handle_recv_change);
-		so.register_change_status_callback(handle_recv_change_status);
-		so.register_handle_remote_devinf_callback(handle_recv_devinf);
+		this.syncobj.register_event_callback(handle_recv_event);
+		this.syncobj.register_get_alert_type_callback(handle_recv_alert_type);
+		this.syncobj.register_change_callback(handle_recv_change);
+		this.syncobj.register_change_status_callback(handle_recv_change_status);
+		this.syncobj.register_handle_remote_devinf_callback(handle_recv_devinf);
 
 		debug("starting sync process...");
-		if (!so.init(out e))
+		if (!this.syncobj.init(out e))
 			return 1;
 
 		debug("running sync process...");
-		if (!so.run(out e))
+		if (!this.syncobj.run(out e))
 			return 1;
 
 		debug("blocking...");
@@ -172,5 +199,6 @@ class SyncmlProvider {
 
 static int main(string[] args) {
 	var provider = new SyncmlProvider();
+	provider.setup_bluetooth(args[0], args[1]);
 	return provider.run();
 }
