@@ -56,66 +56,88 @@ namespace Syncml {
 		public void set_name(string name);
 	}
 
-	[CCode (cname="SmlDevInfDevTyp", cheader_filename="libsyncml/sml_defines.h", cprefix="SML_DEVINF_DEVTYPE_")]
-        public enum DeviceType {
-		UNKNOWN,
-		PAGER,
-		HANDHELD,
-		PDA,
-		PHONE,
-		SMARTPHONE,
-		SERVER,
-		WORKSTATION
-	}
+	[CCode (cheader="libsyncml/sml_devinf.h")]
+	namespace Device {
+		[CCode (cname="SmlDevInfDevTyp", cheader_filename="libsyncml/sml_defines.h", cprefix="SML_DEVINF_DEVTYPE_")]
+		public enum DeviceType {
+			UNKNOWN,
+			PAGER,
+			HANDHELD,
+			PDA,
+			PHONE,
+			SMARTPHONE,
+			SERVER,
+			WORKSTATION
+		}
 
-	[CCode (cname="SmlDevInf", cheader_filename="libsyncml/sml_devinf.h", ref_function="smlDevInfRef", unref_function="smlDevInfUnref")]
-	public class DeviceInfo {
-		[CCode (cname="smlDevInfNew")]
-		public DeviceInfo(string device_id, DeviceType device_type, out Syncml.Error err);
+		[CCode (cname="SmlDevInfDataStore", ref_function="smlDevInfDataStoreRef", unref_function="smlDevInfDataStoreUnref")]
+		public class DataStore {
+			[CCode (cname="smlDevInfDataStoreNew")]
+			public DataStore(string source_ref, out Syncml.Error err);
 
-		public string manufacturer {
-			[CCode (cname="smlDevInfGetManufacturer")] get;
-			[CCode (cname="smlDefInfSetManufacturer")] set;
+			public string source_ref {
+				[CCode (cname="smlDevInfDataStoreGetSourceRef")] get;
+				[CCode (cname="smlDevInfDataStoreSetSourceRef")] set;
+			}
+			public string display_name {
+				[CCode (cname="smlDevInfDataStoreGetDisplayName")] get;
+				[CCode (cname="smlDevInfDataStoreSetDisplayName")] set;
+			}
+			public string max_guid_size {
+				[CCode (cname="smlDevInfGetMaxGUIDSize")] get;
+				[CCode (cname="smlDevInfSetMaxGUIDSize")] set;
+			}
 		}
-		public string model {
-			[CCode (cname="smlDevInfGetModel")] get;
-			[CCode (cname="smlDevInfSetModel")] set;
-		}
-		public string oem {
-			[CCode (cname="smlDevInfGetOEM")] get;
-			[CCode (cname="smlDefInfSetOEM")] set;
-		}
-		public string firmware_version {
-			[CCode (cname="smlDevInfGetFirmwareVersion")] get;
-			[CCode (cname="smlDevInfSetFirmwareVersion")] set;
-		}
-		public string software_version {
-			[CCode (cname="smlDevInfGetSoftwareVersion")] get;
-			[CCode (cname="smlDevInfSetSoftwareVersion")] set;
-		}
-		public string hardware_version {
-			[CCode (cname="smlDevInfGetHardwareVersion")] get;
-			[CCode (cname="smlDevInfSetHardwareVersion")] set;
-		}
-		public string device_id {
-			[CCode (cname="smlDevInfGetDeviceID")] get;
-			[CCode (cname="smlDevInfSetDeviceID")] set;
-		}
-		public DeviceType device_type {
-			[CCode (cname="smlDevInfGetDeviceType")] get;
-			[CCode (cname="smlDevInfSetDeviceType")] set;
-		}
-		public bool supports_utc {
-			[CCode (cname="smlDevInfSupportsUTC")] get;
-			[CCode (cname="smlDevInfSetSupportsUTC")] set;
-		}
-		public bool supports_large_objs {
-			[CCode (cname="smlDevInfSupportsLargeObjs")] get;
-			[CCode (cname="smlDevInfSetSupportsLargeObjs")] set;
-		}
-		public bool supports_num_changes {
-			[CCode (cname="smlDevInfSupportsNumberOfChanges")] get;
-			[CCode (cname="smlDevInfSetSupportsNumberOfChanges")] set;
+
+		[CCode (cname="SmlDevInf", ref_function="smlDevInfRef", unref_function="smlDevInfUnref")]
+		public class DeviceInfo {
+			[CCode (cname="smlDevInfNew")]
+			public DeviceInfo(string device_id, DeviceType device_type, out Syncml.Error err);
+
+			public string manufacturer {
+				[CCode (cname="smlDevInfGetManufacturer")] get;
+				[CCode (cname="smlDefInfSetManufacturer")] set;
+			}
+			public string model {
+				[CCode (cname="smlDevInfGetModel")] get;
+				[CCode (cname="smlDevInfSetModel")] set;
+			}
+			public string oem {
+				[CCode (cname="smlDevInfGetOEM")] get;
+				[CCode (cname="smlDefInfSetOEM")] set;
+			}
+			public string firmware_version {
+				[CCode (cname="smlDevInfGetFirmwareVersion")] get;
+				[CCode (cname="smlDevInfSetFirmwareVersion")] set;
+			}
+			public string software_version {
+				[CCode (cname="smlDevInfGetSoftwareVersion")] get;
+				[CCode (cname="smlDevInfSetSoftwareVersion")] set;
+			}
+			public string hardware_version {
+				[CCode (cname="smlDevInfGetHardwareVersion")] get;
+				[CCode (cname="smlDevInfSetHardwareVersion")] set;
+			}
+			public string device_id {
+				[CCode (cname="smlDevInfGetDeviceID")] get;
+				[CCode (cname="smlDevInfSetDeviceID")] set;
+			}
+			public DeviceType device_type {
+				[CCode (cname="smlDevInfGetDeviceType")] get;
+				[CCode (cname="smlDevInfSetDeviceType")] set;
+			}
+			public bool supports_utc {
+				[CCode (cname="smlDevInfSupportsUTC")] get;
+				[CCode (cname="smlDevInfSetSupportsUTC")] set;
+			}
+			public bool supports_large_objs {
+				[CCode (cname="smlDevInfSupportsLargeObjs")] get;
+				[CCode (cname="smlDevInfSetSupportsLargeObjs")] set;
+			}
+			public bool supports_num_changes {
+				[CCode (cname="smlDevInfSupportsNumberOfChanges")] get;
+				[CCode (cname="smlDevInfSetSupportsNumberOfChanges")] set;
+			}
 		}
 	}
 
@@ -189,11 +211,11 @@ namespace Syncml {
 		[CCode (cname="SmlDataSyncSetAnchorCallback", instance_pos=3.1)]
 		public delegate bool SetAnchorCallback(SyncObject object, string name, string value, out Error error);
 		[CCode (cname="SmlWriteDevInfCallback", instance_pos=2.1)]
-		public delegate bool WriteDevInfCallback(SyncObject object, DeviceInfo devinf, out Error error);
+		public delegate bool WriteDevInfCallback(SyncObject object, Device.DeviceInfo devinf, out Error error);
 		[CCode (cname="SmlReadDevInfCallback", instance_pos=2.1)]
-		public delegate DeviceInfo ReadDevInfCallback(SyncObject object, string devid, out Error error);
+		public delegate Device.DeviceInfo ReadDevInfCallback(SyncObject object, string devid, out Error error);
 		[CCode (cname="HandleRemoteDevInfCallback", instance_pos=2.1)]
-		public delegate bool HandleRemoteDevInfCallback(SyncObject object, DeviceInfo devinf, out Error error);
+		public delegate bool HandleRemoteDevInfCallback(SyncObject object, Device.DeviceInfo devinf, out Error error);
 
 		[CCode (cname="SmlDataSyncObject", ref_function="smlDataSyncObjectRef", unref_function="smlDataSyncObjectUnrefHelper")]
 		public class SyncObject {
