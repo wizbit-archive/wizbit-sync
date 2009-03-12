@@ -56,6 +56,32 @@ namespace Syncml {
 		public void set_name(string name);
 	}
 
+	namespace Transport {
+		[CCode (lower_case_cprefix="SML_TRANSPORT_CONFIG_", cheader_filename="libsyncml/sml_defines.h")]
+		namespace Config {
+			public const string PROXY;
+			public const string USERNAME;
+			public const string PASSWORD;
+			public const string SSL_CA_FILE;
+			public const string PORT;
+			public const string URL;
+			public const string SSL_KEY;
+			public const string SSL_SERVER_CERT;
+			public const string BLUETOOTH_ADDRESS;
+			public const string BLUETOOTH_CHANNEL;
+			public const string IRDA_SERVICE;
+			public const string AT_COMMAND;
+			public const string AT_MANUFACTURER;
+			public const string AT_MODEL;
+
+			public const string DATASTORE;
+			public const string DATASTORE_EVENT;
+			public const string DATASTORE_TODO;
+			public const string DATASTORE_CONTACT;
+			public const string DATASTORE_NOTE;
+		}
+	}
+
 	[CCode (cheader="libsyncml/sml_devinf.h")]
 	namespace Device {
 		[CCode (cname="SmlDevInfDevTyp", cheader_filename="libsyncml/sml_defines.h", cprefix="SML_DEVINF_DEVTYPE_")]
@@ -165,9 +191,6 @@ namespace Syncml {
 			public const string CONNECTION_IRDA;
 			public const string CONNECTION_NET;
 			public const string CONNECTION_USB;
-
-			[CCode (cname="SML_TRANSPORT_CONFIG_PORT")]
-			public const string TRANSPORT_PORT;
 
 			public const string AUTH_USERNAME;
 			public const string AUTH_PASSWORD;

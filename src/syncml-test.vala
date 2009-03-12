@@ -139,8 +139,8 @@ class SyncmlProvider {
 		this.syncobj = new SyncObject(SessionType.SERVER, TransportType.OBEX_CLIENT, out e);
 
 		this.syncobj.set_option(Config.CONNECTION_TYPE, Config.CONNECTION_BLUETOOTH, out e);
-		this.syncobj.set_option(Config.BLUETOOTH_ADDRESS, address, out e);
-		this.syncobj.set_option(Config.BLUETOOTH_CHANNEL, channel, out e);
+		this.syncobj.set_option(Transport.Config.BLUETOOTH_ADDRESS, address, out e);
+		this.syncobj.set_option(Transport.Config.BLUETOOTH_CHANNEL, channel, out e);
 	}
 
 	public void use_string_table() {
