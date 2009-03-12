@@ -56,8 +56,23 @@ namespace Syncml {
 		public void set_name(string name);
 	}
 
+	[CCode (cname="SmlDevInfDevTyp", cheader_filename="libsyncml/sml_defines.h", cprefix="SML_DEVINF_DEVTYPE_")]
+        public enum DeviceType {
+		UNKNOWN,
+		PAGER,
+		HANDHELD,
+		PDA,
+		PHONE,
+		SMARTPHONE,
+		SERVER,
+		WORKSTATION
+	}
+
 	[CCode (cname="SmlDevInf", cheader_filename="libsyncml/sml_devinf.h", ref_function="smlDevInfRef", unref_function="smlDevInfUnref")]
 	public class DevInf {
+		[CCode (cname="smlDevInfNew")]
+		public DevInf(string device_id, DeviceType device_type, out Syncml.Error err);
+
 		public string manufacturer {
 			[CCode (cname="smlDevInfGetManufacturer")] get;
 			[CCode (cname="smlDefInfSetManufacturer")] set;
@@ -86,7 +101,10 @@ namespace Syncml {
 			[CCode (cname="smlDevInfGetDeviceID")] get;
 			[CCode (cname="smlDevInfSetDeviceID")] set;
 		}
-		/* DeviceType */
+		public DeviceType device_type {
+			[CCode (cname="smlDevInfGetDeviceType")] get;
+			[CCode (cname="smlDevInfSetDeviceType")] set;
+		}
 		public bool supports_utc {
 			[CCode (cname="smlDevInfSupportsUTC")] get;
 			[CCode (cname="smlDevInfSetSupportsUTC")] set;
