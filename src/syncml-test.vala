@@ -10,6 +10,7 @@ class SyncmlProvider {
 	private AlertType alertType;
 	private Mutex mutex;
 	private Wiz.Store store;
+	private DataStore datastore;
 
 	private bool send_changes(SyncObject obj, out Syncml.Error err) {
 		debug("Sending changes to remote...");
@@ -171,6 +172,9 @@ class SyncmlProvider {
 		Syncml.Error e;
 
 		store = new Wiz.Store("", Path.build_filename(Environment.get_home_dir(), "sync"));
+
+		this.datastore = new DataStore(store, "TEST_VCARD");
+		this.syncobj.add_datastore("text/vcard", "source", "target", out e);
 
 		this.syncobj.register_event_callback(handle_recv_event);
 		this.syncobj.register_get_alert_type_callback(handle_recv_alert_type);
