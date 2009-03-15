@@ -6,7 +6,6 @@ using Wiz;
 public class SyncmlProvider {
 	private SyncObject syncobj;
 	private SessionType sessionType;
-	private TransportType transportType;
 	private AlertType alertType;
 	private Mutex mutex;
 	private Wiz.Store store;
@@ -136,6 +135,7 @@ public class SyncmlProvider {
 
 	public void setup_bluetooth(string address, string channel) {
 		Syncml.Error e;
+		this.sessionType = SessionType.SERVER;
 		this.syncobj = new SyncObject(SessionType.SERVER, TransportType.OBEX_CLIENT, out e);
 
 		this.syncobj.set_option(Config.CONNECTION_TYPE, Config.CONNECTION_BLUETOOTH, out e);
@@ -145,6 +145,7 @@ public class SyncmlProvider {
 
 	public void setup_http_client(string url) {
 		Syncml.Error e;
+		this.sessionType = SessionType.CLIENT;
 		this.syncobj = new SyncObject(SessionType.CLIENT, TransportType.HTTP_CLIENT, out e);
 
 		this.syncobj.set_option(Transport.Config.URL, url, out e);
@@ -152,6 +153,7 @@ public class SyncmlProvider {
 
 	public void setup_http_server(string port) {
 		Syncml.Error e;
+		this.sessionType = SessionType.SERVER;
 		this.syncobj = new SyncObject(SessionType.SERVER, TransportType.HTTP_SERVER, out e);
 
 		this.syncobj.set_option(Transport.Config.PORT, port, out e);
