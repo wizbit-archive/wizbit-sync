@@ -17,7 +17,7 @@ public class DataStore {
 		return true;
 	}
 
-	public bool add(out char *buf, out long length) {
+	public bool add(char *buf, long length) {
 		var bit = store.create_bit();
 		if (bit == null)
 			return false;

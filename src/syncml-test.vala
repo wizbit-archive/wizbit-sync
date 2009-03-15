@@ -86,15 +86,10 @@ class SyncmlProvider {
 
 		// FIXME: Should really have some kind of mapping between uid and wizbit uuid...
 
-		var bit = store.open_bit(uid);
-		var cb = bit.primary_tip.get_commit_builder();
-		var f = new Wiz.File();
-		f.set_contents((string)data, size);
-		cb.streams.set("data", f);
-		var nc = cb.commit();
+		this.datastore.add(data, size);
 
 		if (sessionType == SessionType.CLIENT) {
-			if (!obj.add_mapping(source, uid, nc.version_uuid, out err)) {
+			if (!obj.add_mapping(source, uid, "fail mapping", out err)) {
 				critical("Adding a mapping failed :-/");
 				return false;
 			}
