@@ -3,7 +3,7 @@ using Syncml;
 using Syncml.DataSync;
 using Wiz;
 
-class SyncmlProvider {
+public class SyncmlProvider {
 	private SyncObject syncobj;
 	private SessionType sessionType;
 	private TransportType transportType;
@@ -141,6 +141,20 @@ class SyncmlProvider {
 		this.syncobj.set_option(Config.CONNECTION_TYPE, Config.CONNECTION_BLUETOOTH, out e);
 		this.syncobj.set_option(Transport.Config.BLUETOOTH_ADDRESS, address, out e);
 		this.syncobj.set_option(Transport.Config.BLUETOOTH_CHANNEL, channel, out e);
+	}
+
+	public void setup_http_client(string url) {
+		Syncml.Error e;
+		this.syncobj = new SyncObject(SessionType.CLIENT, TransportType.HTTP_CLIENT, out e);
+
+		this.syncobj.set_option(Transport.Config.URL, url, out e);
+	}
+
+	public void setup_http_server(string port) {
+		Syncml.Error e;
+		this.syncobj = new SyncObject(SessionType.SERVER, TransportType.HTTP_SERVER, out e);
+
+		this.syncobj.set_option(Transport.Config.PORT, port, out e);
 	}
 
 	public void use_string_table() {
