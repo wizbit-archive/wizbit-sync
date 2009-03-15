@@ -2,6 +2,7 @@ NULL =
 
 SOURCES = \
 	syncml-test.vala \
+	datastore.vala \
 	libsyncml-1.0.vapi \
 	libsyncml-1.0.vala \
 	$(NULL)
