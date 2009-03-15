@@ -16,7 +16,11 @@ class SyncmlProvider {
 		debug("Sending changes to remote...");
 
 		while (false) {
-			// obj.add_change(obj, source, changetype, filename, buf, length, null, out err);
+			//foreach(var d in DataStore) {
+			//	char *buf; long length;
+			//	datastore.get(uid, out buf, out length);
+			//	obj.add_change("SOURCE", changetype, uid, buf, length, null, out err);
+			//}
 		}
 
 		return obj.send_changes(out err);
