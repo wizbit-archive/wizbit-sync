@@ -191,6 +191,12 @@ public class SyncmlProvider {
 		this.datastore = new DataStore(store, "TEST_VCARD");
 		this.syncobj.add_datastore("text/vcard", "source", "target", out e);
 
+		// Nokia devices insist on 'PC Suite'. Most seem not to care.
+		this.syncobj.set_option(Config.IDENTIFIER, "PC Suite");
+
+		// Most devices use WBXML these days - default to using string table
+		this.use_string_table();
+
 		this.syncobj.register_event_callback(handle_recv_event);
 		this.syncobj.register_get_alert_type_callback(handle_recv_alert_type);
 		this.syncobj.register_change_callback(handle_recv_change);
