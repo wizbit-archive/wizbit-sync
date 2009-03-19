@@ -295,4 +295,7 @@ namespace Syncml {
 			public void register_change_status_callback(ChangeStatusCallback callback);
 		}
 	}
+
+	[CCode (cname="g_thread_init")]
+	static void g_thread_init(void *NULL);
 }

@@ -159,30 +159,6 @@ public class SyncmlProvider {
 		this.syncobj.set_option(Transport.Config.PORT, port, out e);
 	}
 
-	public void use_string_table() {
-		assert(this.syncobj != null);
-		Syncml.Error e;
-		this.syncobj.set_option(Config.USE_STRING_TABLE, "1", out e);
-	}
-
-	public void use_number_anchor() {
-		assert(this.syncobj != null);
-		Syncml.Error e;
-		this.syncobj.set_option(Config.USE_TIMESTAMP_ANCHOR, "0", out e);
-	}
-
-	public void use_localtime() {
-		assert(this.syncobj != null);
-		Syncml.Error e;
-		this.syncobj.set_option(Config.USE_LOCALTIME, "1", out e);
-	}
-
-	public void disable_number_changes() {
-		assert(this.syncobj != null);
-		Syncml.Error e;
-		this.syncobj.set_option(Config.USE_NUMBER_OF_CHANGES, "0", out e);
-	}
-
 	public int run() {
 		Syncml.Error e;
 
@@ -194,8 +170,8 @@ public class SyncmlProvider {
 		// Nokia devices insist on 'PC Suite'. Most seem not to care.
 		this.syncobj.set_option(Config.IDENTIFIER, "PC Suite", out e);
 
-		// Most devices use WBXML these days - default to using string table
-		this.use_string_table();
+		// Default to WBXML
+		this.syncobj.set_option(Config.USE_WBXML, "1", out e);
 
 		this.syncobj.register_event_callback(handle_recv_event);
 		this.syncobj.register_get_alert_type_callback(handle_recv_alert_type);
@@ -223,6 +199,9 @@ public class SyncmlProvider {
 }
 
 static int main(string[] args) {
+	if (!Thread.supported()) {
+		Syncml.g_thread_init(null);
+	}
 	var provider = new SyncmlProvider();
 	provider.setup_bluetooth(args[1], args[2]);
 	return provider.run();
