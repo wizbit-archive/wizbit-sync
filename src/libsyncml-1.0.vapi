@@ -199,8 +199,8 @@ namespace Syncml {
 			public const string AUTH_NONE;
 			public const string AUTH_MD5;
 
-			public const string CONFIG_VERSION;
-			public const string CONFIG_IDENTIFIER;
+			public const string VERSION;
+			public const string IDENTIFIER;
 
 			public const string USE_WBXML;
 			public const string USE_STRING_TABLE;
