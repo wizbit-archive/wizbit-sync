@@ -224,6 +224,6 @@ public class SyncmlProvider {
 
 static int main(string[] args) {
 	var provider = new SyncmlProvider();
-	provider.setup_bluetooth(args[0], args[1]);
+	provider.setup_bluetooth(args[1], args[2]);
 	return provider.run();
 }
