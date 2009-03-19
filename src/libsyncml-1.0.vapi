@@ -256,7 +256,7 @@ namespace Syncml {
 			public SyncObject(SessionType dsType, TransportType tspType, out Error err);
 			[CCode (cname="smlDataSyncSetOption")]
 			public bool set_option(string name, string value, out Error err);
-			[CCode (cname="smlDataSyncSendChanges")]
+			[CCode (cname="smlDataSyncAddDatastore")]
 			public bool add_datastore(string contentType, string target, string source, out Error err);
 
 			[CCode (cname="smlDataSyncInit")]

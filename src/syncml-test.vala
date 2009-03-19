@@ -3,19 +3,23 @@ using Syncml;
 using Syncml.DataSync;
 using Wiz;
 
-class SyncmlProvider {
+public class SyncmlProvider {
 	private SyncObject syncobj;
 	private SessionType sessionType;
-	private TransportType transportType;
 	private AlertType alertType;
 	private Mutex mutex;
 	private Wiz.Store store;
+	private DataStore datastore;
 
 	private bool send_changes(SyncObject obj, out Syncml.Error err) {
 		debug("Sending changes to remote...");
 
 		while (false) {
-			// obj.add_change(obj, source, changetype, filename, buf, length, null, out err);
+			//foreach(var d in DataStore) {
+			//	char *buf; long length;
+			//	datastore.get(uid, out buf, out length);
+			//	obj.add_change("SOURCE", changetype, uid, buf, length, null, out err);
+			//}
 		}
 
 		return obj.send_changes(out err);
@@ -85,15 +89,10 @@ class SyncmlProvider {
 
 		// FIXME: Should really have some kind of mapping between uid and wizbit uuid...
 
-		var bit = store.open_bit(uid);
-		var cb = bit.primary_tip.get_commit_builder();
-		var f = new Wiz.File();
-		f.set_contents((string)data, size);
-		cb.streams.set("data", f);
-		var nc = cb.commit();
+		this.datastore.add(data, size);
 
 		if (sessionType == SessionType.CLIENT) {
-			if (!obj.add_mapping(source, uid, nc.version_uuid, out err)) {
+			if (!obj.add_mapping(source, uid, "fail mapping", out err)) {
 				critical("Adding a mapping failed :-/");
 				return false;
 			}
@@ -136,11 +135,28 @@ class SyncmlProvider {
 
 	public void setup_bluetooth(string address, string channel) {
 		Syncml.Error e;
+		this.sessionType = SessionType.SERVER;
 		this.syncobj = new SyncObject(SessionType.SERVER, TransportType.OBEX_CLIENT, out e);
 
 		this.syncobj.set_option(Config.CONNECTION_TYPE, Config.CONNECTION_BLUETOOTH, out e);
 		this.syncobj.set_option(Transport.Config.BLUETOOTH_ADDRESS, address, out e);
 		this.syncobj.set_option(Transport.Config.BLUETOOTH_CHANNEL, channel, out e);
+	}
+
+	public void setup_http_client(string url) {
+		Syncml.Error e;
+		this.sessionType = SessionType.CLIENT;
+		this.syncobj = new SyncObject(SessionType.CLIENT, TransportType.HTTP_CLIENT, out e);
+
+		this.syncobj.set_option(Transport.Config.URL, url, out e);
+	}
+
+	public void setup_http_server(string port) {
+		Syncml.Error e;
+		this.sessionType = SessionType.SERVER;
+		this.syncobj = new SyncObject(SessionType.SERVER, TransportType.HTTP_SERVER, out e);
+
+		this.syncobj.set_option(Transport.Config.PORT, port, out e);
 	}
 
 	public void use_string_table() {
@@ -171,6 +187,15 @@ class SyncmlProvider {
 		Syncml.Error e;
 
 		store = new Wiz.Store("", Path.build_filename(Environment.get_home_dir(), "sync"));
+
+		this.datastore = new DataStore(store, "TEST_VCARD");
+		this.syncobj.add_datastore("text/vcard", "source", "target", out e);
+
+		// Nokia devices insist on 'PC Suite'. Most seem not to care.
+		this.syncobj.set_option(Config.IDENTIFIER, "PC Suite");
+
+		// Most devices use WBXML these days - default to using string table
+		this.use_string_table();
 
 		this.syncobj.register_event_callback(handle_recv_event);
 		this.syncobj.register_get_alert_type_callback(handle_recv_alert_type);
