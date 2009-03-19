@@ -31,6 +31,7 @@ public class SyncmlProvider {
 		switch (type) {
 			case EventType.ERROR:
 				debug("An error occured :-/");
+				mutex.unlock();
 				break;
 
 			case EventType.CONNECT:
@@ -165,7 +166,7 @@ public class SyncmlProvider {
 		store = new Wiz.Store("", Path.build_filename(Environment.get_home_dir(), "sync"));
 
 		this.datastore = new DataStore(store, "TEST_VCARD");
-		this.syncobj.add_datastore("text/vcard", "source", "target", out e);
+		this.syncobj.add_datastore("text/x-vcard", null, "Contacts", out e);
 
 		// Nokia devices insist on 'PC Suite'. Most seem not to care.
 		this.syncobj.set_option(Config.IDENTIFIER, "PC Suite", out e);
@@ -174,9 +175,9 @@ public class SyncmlProvider {
 		this.syncobj.set_option(Config.USE_WBXML, "1", out e);
 
 		this.syncobj.register_event_callback(handle_recv_event);
-		this.syncobj.register_get_alert_type_callback(handle_recv_alert_type);
+		// this.syncobj.register_get_alert_type_callback(handle_recv_alert_type);
 		this.syncobj.register_change_callback(handle_recv_change);
-		this.syncobj.register_change_status_callback(handle_recv_change_status);
+		// this.syncobj.register_change_status_callback(handle_recv_change_status);
 		this.syncobj.register_handle_remote_devinf_callback(handle_recv_devinf);
 
 		debug("starting sync process...");
