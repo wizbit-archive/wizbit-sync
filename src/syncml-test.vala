@@ -83,8 +83,6 @@ public class SyncmlProvider {
 	}
 
 	private bool handle_recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
-		debug("handle_recv_change");
-
 		// Find a datastore called 'source' here....
 
 		// is this slow sync? then check contents are same
