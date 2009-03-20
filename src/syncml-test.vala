@@ -26,7 +26,7 @@ public class SyncmlProvider {
 		return obj.send_changes(out err);
 	}
 
-	private void handle_recv_event(SyncObject obj, EventType type, Syncml.Error err) {
+	private void handle_recv_event(SyncObject obj, EventType type, Syncml.Error? err) {
 		debug("handle_recv_event");
 
 		switch (type) {
@@ -179,7 +179,7 @@ public class SyncmlProvider {
 		// this.syncobj.register_get_alert_type_callback(handle_recv_alert_type);
 		this.syncobj.register_change_callback(handle_recv_change);
 		// this.syncobj.register_change_status_callback(handle_recv_change_status);
-		this.syncobj.register_handle_remote_devinf_callback(handle_recv_devinf);
+		// this.syncobj.register_handle_remote_devinf_callback(handle_recv_devinf);
 
 		debug("starting sync process...");
 		if (!this.syncobj.init(out e))
