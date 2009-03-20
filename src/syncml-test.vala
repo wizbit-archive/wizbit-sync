@@ -42,6 +42,7 @@ public class SyncmlProvider {
 
 			case EventType.DISCONNECT:
 				debug("Remote disconnected");
+				this.datastore.commit();
 				break;
 
 			case EventType.FINISHED:
