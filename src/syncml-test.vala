@@ -3,13 +3,15 @@ using Syncml;
 using Syncml.DataSync;
 using Wiz;
 
+Mutex mutex;
+int mutex_lock;
+
 public class SyncmlProvider {
 	private SyncObject syncobj;
 	private SessionType sessionType;
 	private AlertType alertType;
 	private Syncml.Device.Info devinf;
 
-	private Mutex mutex;
 	private Wiz.Store store;
 	private DataStore datastore;
 
@@ -203,22 +205,35 @@ public class SyncmlProvider {
 		if (!this.syncobj.run(out e))
 			return 1;
 
-		debug("blocking...");
-		mutex = new Mutex();
-		mutex.lock();
-		mutex.lock();
-		mutex.unlock();
-		mutex = null;
-
 		return 0;
 	}	
 }
 
 static int main(string[] args) {
-	if (!Thread.supported()) {
-		Syncml.g_thread_init(null);
+	//if (!Thread.supported()) {
+	//	Syncml.g_thread_init(null);
+	//}
+
+	if (args[1] == "http-test") {
+		var provider1 = new SyncmlProvider();
+		provider1.setup_http_server("1985");
+		provider1.run();
+
+		var provider2 = new SyncmlProvider();
+		provider2.setup_http_client("http://localhost:1985/");
+		provider2.run();
+	} else {
+		var provider = new SyncmlProvider();
+		provider.setup_bluetooth(args[1], args[2]);
+		return provider.run();
 	}
-	var provider = new SyncmlProvider();
-	provider.setup_bluetooth(args[1], args[2]);
-	return provider.run();
+
+	debug("blocking...");
+	mutex = new Mutex();
+	mutex.lock();
+	mutex.lock();
+	mutex.unlock();
+	mutex = null;
+
+	return 0;
 }
