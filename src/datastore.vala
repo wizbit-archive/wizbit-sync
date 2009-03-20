@@ -75,4 +75,10 @@ public class DataStore {
 		this.remove_remote(uid);
 		return true;
 	}
+
+	public void commit() {
+		foreach (var k in this.local_to_remote.get_keys()) {
+			stdout.printf("%s -> %s", k, this.local_to_remote.get(k));
+		}
+	}
 }
