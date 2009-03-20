@@ -13,6 +13,20 @@ public class DataStore {
 
 		this.local_to_remote = new Gee.HashMap<string,string>(str_hash, str_equal, str_equal);
 		this.remote_to_local = new Gee.HashMap<string,string>(str_hash, str_equal, str_equal);
+
+		var root = this.store.open_bit(this.uuid).primary_tip;
+		var f = root.streams.get("data");
+
+		var stream = f.read();
+		var reader = new GLib.DataInputStream(stream);
+
+		long line_length;
+		var line = reader.read_line(out line_length, null);
+		while (line != null) {
+			stdout.printf(line);
+			line = reader.read_line(out line_length, null);
+		}
+
 	}
 
 	private void update_remote_id(string local, string remote, string ?old_remote) {
