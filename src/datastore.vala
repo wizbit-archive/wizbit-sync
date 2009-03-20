@@ -4,9 +4,38 @@ public class DataStore {
 	private Wiz.Store store;
 	private string uuid;
 
+	Gee.HashMap<string,string> local_to_remote;
+	Gee.HashMap<string,string> remote_to_local;
+
 	public DataStore(Wiz.Store store, string uuid) {
 		this.store = store;
 		this.uuid = uuid;
+
+		this.local_to_remote = new Gee.HashMap<string,string>(str_hash, str_equal, str_equal);
+		this.remote_to_local = new Gee.HashMap<string,string>(str_hash, str_equal, str_equal);
+	}
+
+	private void update_remote_id(string local, string remote, string ?old_remote) {
+		if (old_remote != null)
+			this.remote_to_local.remove(old_remote);
+		this.remote_to_local.set(remote, local);
+		this.local_to_remote.set(local, remote);
+	}
+
+	private void update_local_id(string remote, string local, string ?old_local) {
+		if (old_local != null)
+			this.local_to_remote.remove(old_local);
+		this.local_to_remote.set(local, remote);
+		this.remote_to_local.set(remote, local);
+	}
+
+	private string get_local_id(string remote) {
+		return this.remote_to_local.get(remote);
+	}
+
+	private void remove_remote(string remote) {
+		this.local_to_remote.remove(this.get_local_id(remote));
+		this.remote_to_local.remove(remote);
 	}
 
 	public bool get(string uuid, out char *buf, out long length) {
@@ -17,29 +46,33 @@ public class DataStore {
 		return true;
 	}
 
-	public bool add(char *buf, long length) {
+	public string? add(string uid, char *buf, long length) {
 		var bit = store.create_bit();
 		if (bit == null)
-			return false;
+			return null;
 		var cb = bit.get_commit_builder();
 		var f = new Wiz.File();
 		f.set_contents((string)buf, length);
 		cb.streams.set("data", f);
-		cb.commit();
-		return true;
+		var nc = cb.commit();
+		this.update_remote_id(nc.bit.uuid, uid, null);
+		return nc.bit.uuid;
 	}
 
-	public bool update(string uuid, char *buf, long length) {
-		var bit = store.open_bit(uuid);
+	public string? update(string uid, char *buf, long length) {
+		string local = this.get_local_id(uid);
+		var bit = store.open_bit(local);
 		var cb = bit.primary_tip.get_commit_builder();
 		var f = new Wiz.File();
 		f.set_contents((string)buf, length);
 		cb.streams.set("data", f);
-		cb.commit();
-		return true;
+		var nc = cb.commit();
+		this.update_local_id(uuid, nc.bit.uuid, local);
+		return nc.bit.uuid;
 	}
 
-	public bool delete(string uuid) {
-		return false;
+	public bool delete(string uid) {
+		this.remove_remote(uid);
+		return true;
 	}
 }

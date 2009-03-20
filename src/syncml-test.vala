@@ -90,7 +90,7 @@ public class SyncmlProvider {
 
 		// FIXME: Should really have some kind of mapping between uid and wizbit uuid...
 
-		this.datastore.add(data, size);
+		this.datastore.add(uid, data, size);
 
 		if (sessionType == SessionType.CLIENT) {
 			if (!obj.add_mapping(source, uid, "fail mapping", out err)) {
