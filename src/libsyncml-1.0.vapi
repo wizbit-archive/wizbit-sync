@@ -229,7 +229,7 @@ namespace Syncml {
 		}
 
 		[CCode (cname="SmlDataSyncEventCallback", instance_pos=2.1)]
-		public delegate void EventCallback(SyncObject object, EventType type, out Error error);
+		public delegate void EventCallback(SyncObject object, EventType type, Error error);
 		[CCode (cname="SmlDataSyncGetAlertTypeCallback", instance_pos=3.1)]
 		public delegate AlertType GetAlertTypeCallback(SyncObject object, string source, AlertType type, out Error err);
 		[CCode (cname="SmlDataSyncChangeCallback", instance_pos=6.1)]

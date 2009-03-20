@@ -11,7 +11,7 @@ public class SyncmlProvider {
 	private Wiz.Store store;
 	private DataStore datastore;
 
-	private bool send_changes(SyncObject obj, out Syncml.Error err) {
+	private bool send_changes(SyncObject obj) {
 		debug("Sending changes to remote...");
 
 		while (false) {
@@ -22,10 +22,11 @@ public class SyncmlProvider {
 			//}
 		}
 
+		Syncml.Error err;
 		return obj.send_changes(out err);
 	}
 
-	private void handle_recv_event(SyncObject obj, EventType type, out Syncml.Error err) {
+	private void handle_recv_event(SyncObject obj, EventType type, Syncml.Error err) {
 		debug("handle_recv_event");
 
 		switch (type) {
@@ -50,14 +51,14 @@ public class SyncmlProvider {
 			case EventType.GOT_ALL_ALERTS:
 				debug("Got all alerts from remote");
 				if (sessionType == SessionType.CLIENT) {
-					send_changes(obj, out err);
+					send_changes(obj);
 				}
 				break;
 
 			case EventType.GOT_ALL_CHANGES:
 				debug("Got all changes from remote");
 				if (sessionType == SessionType.SERVER) {
-					send_changes(obj, out err);
+					send_changes(obj);
 				}
 				break;
 
