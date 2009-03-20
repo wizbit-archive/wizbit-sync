@@ -95,7 +95,7 @@ public class SyncmlProvider {
 				break;
 
 			case ChangeType.REPLACE:
-				local_id = store.update(uid, data, size);
+				local_id = store.add(uid, data, size);
 				break;
 
 			case ChangeType.DELETE:

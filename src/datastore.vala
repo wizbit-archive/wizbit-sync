@@ -77,8 +77,16 @@ public class DataStore {
 	}
 
 	public void commit() {
-		foreach (var k in this.local_to_remote.get_keys()) {
-			stdout.printf("%s -> %s", k, this.local_to_remote.get(k));
-		}
+		var mapping = new StringBuilder();
+		foreach (var k in this.local_to_remote.get_keys())
+			mapping.append("%s\t%s\n".printf(k, this.local_to_remote.get(k)));
+		var mapping_str = mapping.str;
+
+		var root = this.store.open_bit(this.uuid);
+		var cb = root.primary_tip.get_commit_builder();
+		var f = new Wiz.File();
+		f.set_contents(mapping_str, mapping_str.length);
+		cb.streams.set("data", f);
+		cb.commit();
 	}
 }
