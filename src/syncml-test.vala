@@ -7,6 +7,8 @@ public class SyncmlProvider {
 	private SyncObject syncobj;
 	private SessionType sessionType;
 	private AlertType alertType;
+	private Syncml.Device.Info devinf;
+
 	private Mutex mutex;
 	private Wiz.Store store;
 	private DataStore datastore;
@@ -27,7 +29,6 @@ public class SyncmlProvider {
 	}
 
 	private void handle_recv_event(SyncObject obj, EventType type, Syncml.Error? err) {
-		debug("handle_recv_event");
 
 		switch (type) {
 			case EventType.ERROR:
@@ -117,7 +118,11 @@ public class SyncmlProvider {
 	}
 
 	private bool handle_recv_devinf(SyncObject obj, Device.Info inf, out Syncml.Error err) {
-		debug("handle_recv_devinf");
+		// FIXME: This is a hack because libsynxml crashes :( :(
+		if (this.devinf != null)
+			return true;
+		this.devinf = inf;
+
 		debug("Manufacturer: %s", inf.manufacturer);
 		debug("Model: %s", inf.model);
 		debug("OEM: %s", inf.oem);
@@ -125,9 +130,9 @@ public class SyncmlProvider {
 		debug("Software Version: %s", inf.software_version);
 		debug("Hardware Version: %s", inf.hardware_version);
 		debug("Device ID: %s", inf.device_id);
-		debug("Supports UTC: %b", inf.supports_utc);
-		debug("Supports Largs Objs: %b", inf.supports_large_objs);
-		debug("Supports Num Changes: %b", inf.supports_num_changes);
+		//debug("Supports UTC: %b", inf.supports_utc);
+		//debug("Supports Largs Objs: %b", inf.supports_large_objs);
+		//debug("Supports Num Changes: %b", inf.supports_num_changes);
 
 		for (uint i=0; i < inf.num_datastores(); i++)
 			debug("Location: %s", inf.get_nth_datastore(i).source_ref);
@@ -179,7 +184,7 @@ public class SyncmlProvider {
 		// this.syncobj.register_get_alert_type_callback(handle_recv_alert_type);
 		this.syncobj.register_change_callback(handle_recv_change);
 		// this.syncobj.register_change_status_callback(handle_recv_change_status);
-		// this.syncobj.register_handle_remote_devinf_callback(handle_recv_devinf);
+		this.syncobj.register_handle_remote_devinf_callback(handle_recv_devinf);
 
 		debug("starting sync process...");
 		if (!this.syncobj.init(out e))
