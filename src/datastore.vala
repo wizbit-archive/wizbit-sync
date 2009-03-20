@@ -23,7 +23,17 @@ public class DataStore {
 		long line_length;
 		var line = reader.read_line(out line_length, null);
 		while (line != null) {
-			stdout.printf(line);
+			long i = 0;
+			char *buf = (char *)line;
+
+			while (i < line_length && line[i] != '\t')
+				i++;
+
+			var local = line.substring(0, i);
+			var remote = line.substring(i, line_length-i);
+
+			debug("'%s' -> '%s'", local, remote);
+
 			line = reader.read_line(out line_length, null);
 		}
 
