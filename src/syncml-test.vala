@@ -83,17 +83,27 @@ public class SyncmlProvider {
 	}
 
 	private bool handle_recv_change(SyncObject obj, string source, ChangeType type, string uid, char *data, uint size, out Syncml.Error err) {
-		// Find a datastore called 'source' here....
+		// FIXME: pick datastore based on 'source'...
+		var store = this.datastore;
 
-		// is this slow sync? then check contents are same
-		// if not, check for conflicts
+		string? local_id = null;
 
-		// FIXME: Should really have some kind of mapping between uid and wizbit uuid...
+		switch (type) {
+			case ChangeType.ADD:
+				local_id = store.add(uid, data, size);
+				break;
 
-		this.datastore.add(uid, data, size);
+			case ChangeType.REPLACE:
+				local_id = store.update(uid, data, size);
+				break;
 
-		if (sessionType == SessionType.CLIENT) {
-			if (!obj.add_mapping(source, uid, "fail mapping", out err)) {
+			case ChangeType.DELETE:
+				store.delete(uid);
+				break;
+		}
+
+		if (sessionType == SessionType.CLIENT && local_id != null) {
+			if (!obj.add_mapping(source, uid, local_id, out err)) {
 				critical("Adding a mapping failed :-/");
 				return false;
 			}
