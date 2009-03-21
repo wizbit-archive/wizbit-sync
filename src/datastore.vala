@@ -18,6 +18,11 @@ public class DataStore {
 	}
 
 	public void load_data() {
+		var bit = this.store.open_bit(this.uuid);
+
+		if (bit == null)
+			return;
+
 		var root = this.store.open_bit(this.uuid).primary_tip;
 
 		if (!root.streams.contains("data"))
