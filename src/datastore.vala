@@ -14,7 +14,15 @@ public class DataStore {
 		this.local_to_remote = new Gee.HashMap<string,string>(str_hash, str_equal, str_equal);
 		this.remote_to_local = new Gee.HashMap<string,string>(str_hash, str_equal, str_equal);
 
+		this.load_data();
+	}
+
+	public void load_data() {
 		var root = this.store.open_bit(this.uuid).primary_tip;
+
+		if (!root.streams.contains("data"))
+			return;
+
 		var f = root.streams.get("data");
 
 		var stream = f.read();
