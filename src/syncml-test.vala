@@ -220,7 +220,7 @@ static int main(string[] args) {
 		provider1.run();
 
 		var provider2 = new SyncmlProvider();
-		provider2.setup_http_client("http://localhost:1985/");
+		provider2.setup_http_client("http://127.0.0.1:1985");
 		provider2.run();
 	} else {
 		var provider = new SyncmlProvider();
