@@ -15,4 +15,4 @@ syncml-test: $(SOURCES)
 	valac --save-temps $(VALA_CFLAGS) $(VALA_FLAGS) $(SOURCES)
 
 test: syncml-test
-	./syncml-test http-test
+	./syncml-test obex-test

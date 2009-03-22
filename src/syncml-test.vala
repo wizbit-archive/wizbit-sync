@@ -177,6 +177,25 @@ public class SyncmlProvider {
 		this.syncobj.set_option(Transport.Config.PORT, port, out e);
 	}
 
+	public void setup_obex_client(string url, string port) {
+		Syncml.Error e;
+		this.sessionType = SessionType.SERVER;
+		this.syncobj = new SyncObject(SessionType.SERVER, TransportType.OBEX_CLIENT, out e);
+
+		this.syncobj.set_option(Config.CONNECTION_TYPE, Config.CONNECTION_NET, out e);
+		this.syncobj.set_option(Transport.Config.URL, url, out e);
+		this.syncobj.set_option(Transport.Config.PORT, port, out e);
+	}
+
+	public void setup_obex_server(string port) {
+		Syncml.Error e;
+		this.sessionType = SessionType.CLIENT;
+		this.syncobj = new SyncObject(SessionType.CLIENT, TransportType.OBEX_SERVER, out e);
+
+		this.syncobj.set_option(Config.CONNECTION_TYPE, Config.CONNECTION_NET, out e);
+		this.syncobj.set_option(Transport.Config.PORT, port, out e);
+	}
+
 	public int run() {
 		Syncml.Error e;
 
@@ -221,6 +240,14 @@ static int main(string[] args) {
 
 		var provider2 = new SyncmlProvider();
 		provider2.setup_http_client("http://127.0.0.1:1985");
+		provider2.run();
+	} else if (args[1] == "obex-test") {
+		var provider1 = new SyncmlProvider();
+		provider1.setup_obex_server("1985");
+		provider1.run();
+
+		var provider2 = new SyncmlProvider();
+		provider2.setup_obex_client("127.0.0.1", "1985");
 		provider2.run();
 	} else {
 		var provider = new SyncmlProvider();
