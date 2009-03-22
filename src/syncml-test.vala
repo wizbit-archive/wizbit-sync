@@ -246,6 +246,8 @@ static int main(string[] args) {
 		provider1.setup_obex_server("1985");
 		provider1.run();
 
+		Thread.usleep(200);
+
 		var provider2 = new SyncmlProvider();
 		provider2.setup_obex_client("127.0.0.1", "1985");
 		provider2.run();
