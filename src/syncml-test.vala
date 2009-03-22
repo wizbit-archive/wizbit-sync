@@ -216,12 +216,18 @@ public class SyncmlProvider {
 		this.syncobj.register_handle_remote_devinf_callback(handle_recv_devinf);
 
 		debug("starting sync process...");
-		if (!this.syncobj.init(out e))
+		if (!this.syncobj.init(out e)) {
+			debug("unable to init..");
+			assert(false);
 			return 1;
+		}
 
 		debug("running sync process...");
-		if (!this.syncobj.run(out e))
+		if (!this.syncobj.run(out e)) {
+			debug("unable to start...");
+			assert(false);
 			return 1;
+		}
 
 		return 0;
 	}	
