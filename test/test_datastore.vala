@@ -2,10 +2,22 @@ using Wiz;
 
 public class TestDataStore {
 
+	Wiz.Store store;
+	string olddir;
+	string directory;
+
 	public void setup() {
+		this.olddir = Environment.get_current_dir();
+		this.directory = DirUtils.mkdtemp(Path.build_filename(Environment.get_tmp_dir(), "XXXXXX"));
+		stdout.printf("%s\n", this.directory);
+		Environment.set_current_dir(this.directory);
+
+		store = new Wiz.Store("", ".");
 	}
 
 	public void teardown() {
+		Environment.set_current_dir(this.olddir);
+		DirUtils.remove(this.directory);
 	}
 
 	public void test_create() {
