@@ -29,6 +29,17 @@ public class TestDataStore {
 
 		var ds = new DataStore(this.store, "DATASTORE");
 		ds.add("1", buffer, 20);
+		ds.commit();
+	}
+
+	public void test_update() {
+		string buffer = "123456789012345678901234567890";
+
+		this.test_add();
+
+		var ds = new DataStore(this.store, "DATASTORE");
+		ds.update("1", buffer, 30);
+		ds.commit();
 	}
 
 	public TestSuite get_suite() {
