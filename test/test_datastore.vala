@@ -25,6 +25,10 @@ public class TestDataStore {
 	}
 
 	public void test_add() {
+		string buffer = "12345678901234567890";
+
+		var ds = new DataStore(this.store, "DATASTORE");
+		ds.add("1", buffer, 20);
 	}
 
 	public TestSuite get_suite() {
