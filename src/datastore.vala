@@ -45,9 +45,9 @@ public class DataStore {
 				i++;
 
 			var local = line.substring(0, i);
-			var remote = line.substring(i, line_length-i);
+			var remote = line.substring(i+1, line_length-i-1);
 
-			debug("'%s' -> '%s'", local, remote);
+			this.update_remote_id(local, remote, null);
 
 			line = reader.read_line(out line_length, null);
 		}
