@@ -42,11 +42,21 @@ public class TestDataStore {
 		ds.commit();
 	}
 
+	public void test_delete() {
+		this.test_add();
+
+		var ds = new DataStore(this.store, "DATASTORE");
+		ds.delete("1");
+		ds.commit();
+	}
+
 	public TestSuite get_suite() {
 		var ts = new TestSuite("datastore");
 
 		ts.add(new TestCase("create", 0, this.setup, this.test_create, this.teardown));
 		ts.add(new TestCase("add", 0, this.setup, this.test_add, this.teardown));
+		ts.add(new TestCase("update", 0, this.setup, this.test_update, this.teardown));
+		ts.add(new TestCase("delete", 0, this.setup, this.test_delete, this.teardown));
 
 		return ts;
 	}
