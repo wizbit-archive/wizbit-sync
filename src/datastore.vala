@@ -11,6 +11,14 @@ public class DataStore {
 		this.store = store;
 		this.uuid = uuid;
 
+		// FIXME: This is only needed because we don't have a solid
+		// bootstrapping story.
+		var root = this.store.open_bit(this.uuid);
+		if (root.primary_tip == null) {
+			var cb = root.get_commit_builder();
+			cb.commit();
+		}
+
 		this.local_to_remote = new Gee.HashMap<string,string>(str_hash, str_equal, str_equal);
 		this.remote_to_local = new Gee.HashMap<string,string>(str_hash, str_equal, str_equal);
 
